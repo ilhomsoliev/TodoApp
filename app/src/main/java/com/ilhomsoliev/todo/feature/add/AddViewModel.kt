@@ -1,0 +1,80 @@
+package com.ilhomsoliev.todo.feature.add
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.ilhomsoliev.todo.core.BaseSharedViewModel
+import com.ilhomsoliev.todo.core.generateRandomString
+import com.ilhomsoliev.todo.data.models.TodoItemModel
+import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
+import com.ilhomsoliev.todo.feature.add.model.AddAction
+import com.ilhomsoliev.todo.feature.add.model.AddEvent
+import com.ilhomsoliev.todo.feature.add.model.AddViewState
+
+class AddViewModel(
+    private val repository: TodoItemsRepository
+) : BaseSharedViewModel<AddViewState, AddAction, AddEvent>(AddViewState()) {
+
+    override fun obtainEvent(viewEvent: AddEvent) {
+        when (viewEvent) {
+            is AddEvent.Add -> {
+                val response = repository.addTodo(
+                    TodoItemModel(
+                        id = generateRandomString(),
+                        text = viewEvent.text,
+                        priority = viewState.priority,
+                        deadline = viewState.deadline,
+                        isCompleted = false,
+                        createdDate = System.currentTimeMillis(),
+                        editedDate = null,
+                    )
+                )
+                if (response) {
+                    viewAction = AddAction.NavigateBack
+                } else {
+                    // viewAction = AddAction.ShowError
+                }
+            }
+
+            is AddEvent.DeadlineChange -> {
+                viewState = viewState.copy(deadline = viewEvent.date)
+            }
+
+            is AddEvent.DeadlineSwitchClick -> {
+                viewState =
+                    viewState.copy(isDeadlineTimeActivated = !viewState.isDeadlineTimeActivated)
+            }
+
+            is AddEvent.PriorityChange -> {
+                viewState = viewState.copy(priority = viewEvent.priority)
+            }
+
+            is AddEvent.TextChange -> {
+                viewState = viewState.copy(text = viewEvent.text)
+            }
+
+            is AddEvent.EnterScreen -> {
+                viewEvent.id?.let {
+                    repository.getTodoById(it)?.let { todo ->
+                        viewAction = AddAction.SetTodoDescription(todo.text)
+                        viewState = viewState.copy(
+                            text = todo.text,
+                            priority = todo.priority,
+                            deadline = todo.deadline
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+class AddViewModelFactory(private val repository: TodoItemsRepository) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(AddViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return AddViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+}
