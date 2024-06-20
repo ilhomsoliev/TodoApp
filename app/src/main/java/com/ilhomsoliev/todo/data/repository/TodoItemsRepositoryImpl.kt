@@ -2,8 +2,10 @@ package com.ilhomsoliev.todo.data.repository
 
 import com.ilhomsoliev.todo.data.models.TodoItemModel
 import com.ilhomsoliev.todo.data.models.TodoPriority
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 
 class TodoItemsRepositoryImpl : TodoItemsRepository {
     private val _todos = MutableStateFlow(
@@ -37,8 +39,24 @@ class TodoItemsRepositoryImpl : TodoItemsRepository {
             ),
         )
     )
+    private val _showCompleted = MutableStateFlow(false)
 
-    override fun getTodos(): StateFlow<List<TodoItemModel>> = _todos
+    override fun setShowCompleted(showCompleted: Boolean) {
+        _showCompleted.value = showCompleted
+    }
+
+    override fun getTodos(): Flow<List<TodoItemModel>> =
+        combine(_todos, _showCompleted) { todos, showCompleted ->
+            if (showCompleted) {
+                todos.filter { it.isCompleted }
+            } else {
+                todos
+            }
+        }
+
+    override fun getDoneTodosAmount(): Flow<Int> = _todos.map {
+        it.count { it.isCompleted }
+    }
 
     override fun getTodoById(todoId: String): TodoItemModel? {
         val id = _todos.value.indexOfFirst { it.id == todoId }
@@ -47,6 +65,7 @@ class TodoItemsRepositoryImpl : TodoItemsRepository {
     }
 
     override fun addTodo(todo: TodoItemModel): Boolean {
+        if(todo.text.isEmpty()) return false
         _todos.value = _todos.value.toMutableList().apply { add(todo) }
         return true
     }

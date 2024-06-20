@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backPrimary"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -15,7 +16,8 @@
             android:id="@+id/iconClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/close" />
+            android:src="@drawable/close"
+            app:tint="@color/labelPrimary" />
 
         <View
             android:layout_width="0dp"
@@ -45,12 +47,14 @@
             android:id="@+id/editTextDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
+            android:background="@color/backSecondary"
+            android:backgroundTint="@color/backSecondary"
             android:gravity="top|start"
             android:hint="Что надо сделать..."
-            android:lines="5"
+            android:lines="100"
             android:minLines="3"
             android:padding="16dp"
+            android:textColor="@color/labelTertiary"
             android:textSize="18sp" />
     </androidx.cardview.widget.CardView>
 
@@ -68,6 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Важность"
+            android:textColor="@color/labelPrimary"
             android:textSize="16sp" />
 
 
@@ -76,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Net"
-            android:textColor="@color/black"
+            android:textColor="@color/labelTertiary"
             android:textSize="16sp" />
 
         <com.google.android.material.divider.MaterialDivider
@@ -107,6 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Сделать до"
+                android:textColor="@color/labelPrimary"
                 android:textSize="16sp" />
 
             <TextView

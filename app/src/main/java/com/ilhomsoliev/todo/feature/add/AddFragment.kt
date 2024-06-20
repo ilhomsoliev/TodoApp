@@ -19,6 +19,7 @@ import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
 import com.ilhomsoliev.todo.feature.home.repository
+import com.ilhomsoliev.todo.shared.showCustomSnackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -58,7 +59,7 @@ class AddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         subscribeToViewState()
-        subscribeToActions()
+        subscribeToActions(view)
         setupListeners()
     }
 
@@ -66,8 +67,8 @@ class AddFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.viewStates().collectLatest { state: AddViewState ->
                 with(binding) {
+                    editTextDescription.setText(state.text)
                     textViewPriority.text = state.priority.nameRu
-
                     if (state.deadline == null) {
                         textViewDeadline.visibility = View.INVISIBLE
                     } else {
@@ -79,16 +80,15 @@ class AddFragment : Fragment() {
         }
     }
 
-    private fun subscribeToActions() {
+    private fun subscribeToActions(view: View) {
         lifecycleScope.launch {
             viewModel.viewActions().collectLatest { action ->
                 action.printToLog("Here 1r")
 
                 when (action) {
                     is AddAction.NavigateBack -> popBack()
-                    is AddAction.SetTodoDescription -> {
-                        action.text.printToLog("Here")
-                        binding.editTextDescription.setText(action.text)
+                    is AddAction.ShowSnackbar -> {
+                        showCustomSnackbar(view, action.text)
                     }
 
                     null -> {}

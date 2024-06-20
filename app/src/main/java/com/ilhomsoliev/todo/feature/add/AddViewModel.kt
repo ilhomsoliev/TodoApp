@@ -28,10 +28,10 @@ class AddViewModel(
                         editedDate = null,
                     )
                 )
-                if (response) {
-                    viewAction = AddAction.NavigateBack
+                viewAction = if (response) {
+                    AddAction.NavigateBack
                 } else {
-                    // viewAction = AddAction.ShowError
+                    AddAction.ShowSnackbar("Заполните поля")
                 }
             }
 
@@ -53,15 +53,12 @@ class AddViewModel(
             }
 
             is AddEvent.EnterScreen -> {
-                viewEvent.id?.let {
-                    repository.getTodoById(it)?.let { todo ->
-                        viewAction = AddAction.SetTodoDescription(todo.text)
-                        viewState = viewState.copy(
-                            text = todo.text,
-                            priority = todo.priority,
-                            deadline = todo.deadline
-                        )
-                    }
+                repository.getTodoById(viewEvent.id)?.let { todo ->
+                    viewState = viewState.copy(
+                        text = todo.text,
+                        priority = todo.priority,
+                        deadline = todo.deadline
+                    )
                 }
             }
         }

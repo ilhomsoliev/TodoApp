@@ -5,7 +5,7 @@
     android:id="@+id/t"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="@color/backPrimary"
     tools:context=".feature.home.HomeFragment">
 
     <LinearLayout
@@ -24,6 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Мои дела"
+                android:textColor="@color/labelPrimary"
                 android:textSize="32sp"
                 android:textStyle="bold" />
 
@@ -37,6 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Выполнено — 5"
+                    android:textColor="@color/labelTertiary"
                     android:textSize="18sp"
                     android:textStyle="normal" />
 
@@ -59,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
-            app:cardBackgroundColor="@android:color/white"
+            app:cardBackgroundColor="@color/backSecondary"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp">
 
@@ -78,8 +80,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
+        android:backgroundTint="@color/blue"
         android:contentDescription="Add Button"
-        android:onClick="onFabClick"
         android:src="@drawable/add" />
 
 </RelativeLayout>

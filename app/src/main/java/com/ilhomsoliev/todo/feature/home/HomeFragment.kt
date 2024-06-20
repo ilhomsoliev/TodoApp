@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.app.MainActivity
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepositoryImpl
@@ -86,6 +87,10 @@ class HomeFragment : Fragment() {
             viewModel.viewStates().collectLatest { state: HomeViewState ->
                 with(binding) {
                     todoAdapter.submitList(state.todos)
+                    textViewCompletedTodosCount.text = "Выполнено — ${state.completedCount}"
+                    iconIsCompletedVisible.setImageResource(
+                        if (state.isShowCompletedEnabled) R.drawable.baseline_visibility_off_24 else R.drawable.eye_active
+                    )
                 }
             }
         }
@@ -101,6 +106,10 @@ class HomeFragment : Fragment() {
         with(binding) {
             floatingActionButtonAdd.setOnClickListener {
                 (activity as MainActivity).navigateToAddFragment("-1")
+            }
+
+            iconIsCompletedVisible.setOnClickListener {
+                viewModel.obtainEvent(HomeEvent.ToggleIsCompletedVisible)
             }
         }
     }

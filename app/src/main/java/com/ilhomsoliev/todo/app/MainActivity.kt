@@ -1,12 +1,16 @@
 package com.ilhomsoliev.todo.app
 
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.snackbar.Snackbar
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.feature.add.AddFragment
 import com.ilhomsoliev.todo.feature.home.HomeFragment
@@ -14,7 +18,10 @@ import com.ilhomsoliev.todo.feature.home.HomeFragment
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
+        window.statusBarColor = ContextCompat.getColor(this, R.color.backPrimary)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.backPrimary)
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

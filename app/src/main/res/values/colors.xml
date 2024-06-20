@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="tertiary">#3C3C434D</color>
+    <color name="supportSeparator">#E0E0E0</color>
+    <color name="supportOverlay">#F0F0F0</color>
+
+    <color name="labelPrimary">#000000</color>
+    <color name="labelSecondary">#808080</color>
+    <color name="labelTertiary">#A0A0A0</color>
+    <color name="labelDisable">#D0D0D0</color>
+
+    <color name="red">#FF3D30</color>
+    <color name="green">#30FF30</color>
+    <color name="blue">#007AFF</color>
+    <color name="gray">#B0B0B0</color>
+    <color name="grayLight">#D0D0D0</color>
+    <color name="white">#FFFFFF</color>
+
+    <color name="backPrimary">#F0F0F0</color>
+    <color name="backSecondary">#FFFFFF</color>
+    <color name="backElevated">#FFFFFF</color>
 
 </resources>

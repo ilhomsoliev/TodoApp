@@ -1,7 +1,31 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.ToDo" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryVariant">@color/red</item>
+        <item name="colorOnPrimary">@color/labelPrimary</item>
+
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/green</item>
+        <item name="colorOnSecondary">@color/labelPrimary</item>
+
+        <!-- Background colors -->
+<!--        <item name="colorBackground">@color/backPrimary</item>-->
+        <item name="colorSurface">@color/backSecondary</item>
+        <item name="colorError">@color/red</item>
+        <item name="colorOnBackground">@color/labelPrimary</item>
+        <item name="colorOnSurface">@color/labelPrimary</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Label colors -->
+        <!--<item name="colorPrimaryText">@color/labelPrimary</item>
+        <item name="colorSecondaryText">@color/labelSecondary</item>
+        <item name="colorTertiaryText">@color/labelTertiary</item>
+        <item name="colorDisabledText">@color/labelDisable</item>-->
+
+        <!-- Additional colors -->
+        <item name="colorControlHighlight">@color/grayLight</item>
+        <item name="colorButtonNormal">@color/gray</item>
     </style>
 </resources>

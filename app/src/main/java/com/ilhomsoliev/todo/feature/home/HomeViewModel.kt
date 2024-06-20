@@ -8,7 +8,8 @@ import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class HomeViewModel(
     private val repository: TodoItemsRepository
@@ -23,15 +24,24 @@ class HomeViewModel(
             is HomeEvent.DeleteItem -> {
                 deleteTodoAt(viewEvent.id)
             }
+
+            HomeEvent.ToggleIsCompletedVisible -> {
+                val newValue = !viewState.isShowCompletedEnabled
+                viewState = viewState.copy(isShowCompletedEnabled = newValue)
+                repository.setShowCompleted(newValue)
+            }
         }
     }
 
     init {
-        viewModelScope.launch {
-            repository.getTodos().collect {
-                viewState = viewState.copy(todos = it)
-            }
-        }
+        repository.getTodos().onEach {
+            viewState = viewState.copy(todos = it)
+        }.launchIn(viewModelScope)
+
+        repository.getDoneTodosAmount().onEach {
+            viewState = viewState.copy(completedCount = it)
+        }.launchIn(viewModelScope)
+
     }
 
     private fun deleteTodoAt(todoId: String) {
