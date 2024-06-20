@@ -17,9 +17,9 @@ class AddViewModel(
     override fun obtainEvent(viewEvent: AddEvent) {
         when (viewEvent) {
             is AddEvent.Add -> {
-                val response = repository.addTodo(
+                val response = repository.insertTodo(
                     TodoItemModel(
-                        id = generateRandomString(),
+                        id = viewState.id ?: generateRandomString(),
                         text = viewEvent.text,
                         priority = viewState.priority,
                         deadline = viewState.deadline,
@@ -39,13 +39,8 @@ class AddViewModel(
                 viewState = viewState.copy(deadline = viewEvent.date)
             }
 
-            is AddEvent.DeadlineSwitchClick -> {
-                viewState =
-                    viewState.copy(isDeadlineTimeActivated = !viewState.isDeadlineTimeActivated)
-            }
-
             is AddEvent.PriorityChange -> {
-                viewState = viewState.copy(priority = viewEvent.priority)
+                viewState = viewState.copy(priority = viewEvent.priority, )
             }
 
             is AddEvent.TextChange -> {
@@ -55,11 +50,19 @@ class AddViewModel(
             is AddEvent.EnterScreen -> {
                 repository.getTodoById(viewEvent.id)?.let { todo ->
                     viewState = viewState.copy(
+                        id = todo.id,
                         text = todo.text,
                         priority = todo.priority,
-                        deadline = todo.deadline
+                        deadline = todo.deadline,
                     )
                 }
+            }
+
+            AddEvent.Delete -> {
+                viewState.id?.let {
+                    repository.deleteTodo(it)
+                }
+                viewAction = AddAction.NavigateBack
             }
         }
     }

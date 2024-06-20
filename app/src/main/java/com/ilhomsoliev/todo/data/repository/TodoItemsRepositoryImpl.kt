@@ -64,16 +64,11 @@ class TodoItemsRepositoryImpl : TodoItemsRepository {
         return _todos.value[id]
     }
 
-    override fun addTodo(todo: TodoItemModel): Boolean {
-        if(todo.text.isEmpty()) return false
-        _todos.value = _todos.value.toMutableList().apply { add(todo) }
-        return true
-    }
-
-    override fun updateTodo(todo: TodoItemModel): Boolean {
+    override fun insertTodo(todo: TodoItemModel): Boolean {
+        if (todo.text.isEmpty()) return false
         val id = _todos.value.indexOfFirst { it.id == todo.id }
-        if (id == -1) return false
-        _todos.value = _todos.value.toMutableList().apply { set(id, todo) }
+        if (id == -1) _todos.value = _todos.value.toMutableList().apply { add(todo) }
+        else _todos.value = _todos.value.toMutableList().apply { set(id, todo) }
         return true
     }
 

@@ -14,9 +14,12 @@ import com.ilhomsoliev.todo.app.MainActivity
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepositoryImpl
 import com.ilhomsoliev.todo.databinding.FragmentHomeBinding
+import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
+import com.ilhomsoliev.todo.shared.showCustomSnackbar
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 val repository: TodoItemsRepository = TodoItemsRepositoryImpl()
@@ -44,12 +47,11 @@ class HomeFragment : Fragment() {
         initViews()
 
         subscribeToViewState()
-        subscribeToActions()
+        subscribeToActions(view)
         setupListeners()
     }
 
     private fun initViews() {
-
         todoAdapter = TodosRVAdapter(
             onClick = { todo ->
                 val id = todo.id
@@ -68,7 +70,7 @@ class HomeFragment : Fragment() {
             adapter = todoAdapter
         }
 
-        val swipeHandler = object : SwipeToDeleteCallback(
+      val swipeHandler = object : SwipeToDeleteCallback(
             adapter = todoAdapter,
             onSwipeLeft = { id ->
                 viewModel.obtainEvent(HomeEvent.DeleteItem(id))
@@ -83,22 +85,27 @@ class HomeFragment : Fragment() {
     }
 
     private fun subscribeToViewState() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.viewStates().collectLatest { state: HomeViewState ->
                 with(binding) {
                     todoAdapter.submitList(state.todos)
                     textViewCompletedTodosCount.text = "Выполнено — ${state.completedCount}"
                     iconIsCompletedVisible.setImageResource(
-                        if (state.isShowCompletedEnabled) R.drawable.baseline_visibility_off_24 else R.drawable.eye_active
+                        if (state.isShowCompletedEnabled) R.drawable.eye_off else R.drawable.eye_active
                     )
                 }
             }
         }
     }
 
-    private fun subscribeToActions() {
-        lifecycleScope.launch {
-
+    private fun subscribeToActions(view: View) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.viewActions().onEach { action ->
+                when (action) {
+                    is HomeAction.ShowSnackbar -> showCustomSnackbar(view, action.text)
+                    null -> {}
+                }
+            }
         }
     }
 

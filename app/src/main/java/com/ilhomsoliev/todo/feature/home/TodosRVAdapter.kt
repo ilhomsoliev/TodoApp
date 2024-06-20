@@ -139,13 +139,7 @@ class TodosRVAdapter(
                     checkedColor // checked color
                 )
             )
-            // Apply the tint based on API level
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                checkBox.buttonTintList = colorStateList
-            } else {
-                CompoundButtonCompat.setButtonTintList(checkBox, colorStateList)
-            }
-
+            checkBox.buttonTintList = colorStateList
         }
     }
 

@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.app.MainActivity
 import com.ilhomsoliev.todo.core.formatDate
-import com.ilhomsoliev.todo.core.printToLog
 import com.ilhomsoliev.todo.data.models.TodoPriority
 import com.ilhomsoliev.todo.databinding.FragmentAddBinding
 import com.ilhomsoliev.todo.feature.add.model.AddAction
@@ -75,6 +74,11 @@ class AddFragment : Fragment() {
                         textViewDeadline.visibility = View.VISIBLE
                         textViewDeadline.text = formatDate(state.deadline)
                     }
+                    if (state.deadline != null) {
+                        switchDeadline.isChecked = true
+                    } else {
+                        switchDeadline.isChecked = false
+                    }
                 }
             }
         }
@@ -83,8 +87,6 @@ class AddFragment : Fragment() {
     private fun subscribeToActions(view: View) {
         lifecycleScope.launch {
             viewModel.viewActions().collectLatest { action ->
-                action.printToLog("Here 1r")
-
                 when (action) {
                     is AddAction.NavigateBack -> popBack()
                     is AddAction.ShowSnackbar -> {
@@ -108,22 +110,24 @@ class AddFragment : Fragment() {
             }
 
             layoutRemoveAddTodo.setOnClickListener {
-                popBack()
+                viewModel.obtainEvent(AddEvent.Delete)
             }
 
             layoutDeadlinePicker.setOnClickListener {
-                showDatePickerDialog { timeInMillis ->
+                showDatePickerDialog({ timeInMillis ->
                     viewModel.obtainEvent(AddEvent.DeadlineChange(timeInMillis))
+                }) {
+
                 }
             }
             switchDeadline.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    showDatePickerDialog { timeInMillis ->
+                    showDatePickerDialog({ timeInMillis ->
                         viewModel.obtainEvent(AddEvent.DeadlineChange(timeInMillis))
+                    }) {
+//                        if()
                     }
-                    viewModel.obtainEvent(AddEvent.DeadlineSwitchClick(true))
                 } else {
-                    viewModel.obtainEvent(AddEvent.DeadlineSwitchClick(false))
                     viewModel.obtainEvent(AddEvent.DeadlineChange(null))
                 }
             }
@@ -147,7 +151,10 @@ class AddFragment : Fragment() {
 
     }
 
-    private fun showDatePickerDialog(onDateSet: (currentTimeMillis: Long) -> Unit) {
+    private fun showDatePickerDialog(
+        onDateSet: (currentTimeMillis: Long) -> Unit,
+        onCancelled: () -> Unit
+    ) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -165,9 +172,11 @@ class AddFragment : Fragment() {
                 },
                 year,
                 month,
-                day
+                day,
             )
-
+        datePickerDialog.setOnCancelListener {
+            onCancelled()
+        }
         datePickerDialog.show()
     }
 
