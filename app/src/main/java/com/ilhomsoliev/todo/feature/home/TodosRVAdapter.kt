@@ -2,15 +2,14 @@ package com.ilhomsoliev.todo.feature.home
 
 import android.content.res.ColorStateList
 import android.graphics.Paint
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
-import androidx.core.widget.CompoundButtonCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,46 +17,30 @@ import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.core.formatDate
 import com.ilhomsoliev.todo.data.models.TodoItemModel
 import com.ilhomsoliev.todo.data.models.TodoPriority
+import com.ilhomsoliev.todo.feature.home.TodosRVAdapter.TodoViewHolder
 
 class TodosRVAdapter(
     private val onClick: (TodoItemModel) -> Unit,
+    private val onDelete: (TodoItemModel) -> Unit,
     private val onUpdate: (TodoItemModel) -> Unit,
-    private val onAddClick: () -> Unit,
-) : ListAdapter<TodoItemModel, RecyclerView.ViewHolder>(TodoDiffCallback()) {
+) : ListAdapter<TodoItemModel, TodoViewHolder>(TodoDiffCallback()) {
 
-    companion object {
-        private const val ITEM_TYPE_TODO = 0
-        private const val ITEM_TYPE_ADD = 1
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder =
+        TodoViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_todo, parent, false),
+            onClick,
+            onDelete,
+            onUpdate,
+        )
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) ITEM_TYPE_ADD else ITEM_TYPE_TODO
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == ITEM_TYPE_TODO) {
-            val view =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_todo, parent, false)
-            TodoViewHolder(view, onClick, onUpdate)
-        } else {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.item_add, parent, false)
-            AddViewHolder(view, onAddClick)
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is TodoViewHolder) {
-            holder.bind(getItem(position))
-        }
-    }
-
-    override fun getItemCount(): Int {
-        return super.getItemCount() + 1
+    override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
     class TodoViewHolder(
         itemView: View,
         private val onClick: (TodoItemModel) -> Unit,
+        private val onDelete: (TodoItemModel) -> Unit,
         private val onUpdate: (TodoItemModel) -> Unit
     ) : RecyclerView.ViewHolder(itemView) {
         private val taskTextView: TextView = itemView.findViewById(R.id.textViewTaskText)
@@ -72,6 +55,12 @@ class TodosRVAdapter(
                 currentTodo?.let {
                     onClick(it)
                 }
+            }
+            itemView.setOnLongClickListener { view ->
+                currentTodo?.let {
+                    showPopupMenu(view, it)
+                }
+                true
             }
 
             checkBox.setOnCheckedChangeListener { _, isChecked ->
@@ -125,7 +114,6 @@ class TodosRVAdapter(
             }
 
             // CheckBox
-            checkBox.isChecked = todo.isCompleted
             val uncheckedColorHighPriority = ContextCompat.getColor(itemView.context, R.color.red)
             val uncheckedColor = ContextCompat.getColor(itemView.context, R.color.supportSeparator)
             val checkedColor = ContextCompat.getColor(itemView.context, R.color.green)
@@ -140,21 +128,38 @@ class TodosRVAdapter(
                 )
             )
             checkBox.buttonTintList = colorStateList
+            checkBox.isChecked = todo.isCompleted
         }
-    }
 
-    class AddViewHolder(
-        itemView: View,
-        private val onAddClick: () -> Unit
-    ) : RecyclerView.ViewHolder(itemView) {
-        init {
-            itemView.setOnClickListener {
-                onAddClick()
+        private fun showPopupMenu(view: View, item: TodoItemModel) {
+            val popupMenu = PopupMenu(view.context, view)
+            popupMenu.inflate(R.menu.todo_item_menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.menu_item_edit -> {
+                        onClick(item)
+                        true
+                    }
+
+                    R.id.menu_item_delete -> {
+                        onDelete(item)
+                        true
+                    }
+
+                    R.id.menu_item_mark_as_done -> {
+                        onUpdate(item)
+                        true
+                    }
+
+                    else -> false
+                }
             }
+            popupMenu.show()
         }
     }
 
     class TodoDiffCallback : DiffUtil.ItemCallback<TodoItemModel>() {
+
         override fun areItemsTheSame(oldItem: TodoItemModel, newItem: TodoItemModel): Boolean {
             return oldItem.id == newItem.id
         }
@@ -163,5 +168,4 @@ class TodosRVAdapter(
             return oldItem == newItem
         }
     }
-
 }

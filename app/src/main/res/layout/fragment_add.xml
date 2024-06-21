@@ -5,6 +5,9 @@
     android:layout_height="match_parent"
     android:background="@color/backPrimary"
     android:orientation="vertical"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:focusable="true"
     android:padding="16dp">
 
     <LinearLayout
@@ -51,6 +54,7 @@
             android:backgroundTint="@color/backSecondary"
             android:gravity="top|start"
             android:hint="Что надо сделать..."
+
             android:lines="100"
             android:minLines="3"
             android:padding="16dp"

@@ -26,12 +26,10 @@ open class SwipeToDeleteCallback(
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        if(viewHolder is TodosRVAdapter.AddViewHolder) return false
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        if(viewHolder is TodosRVAdapter.AddViewHolder) return
 
         val position = viewHolder.layoutPosition
         val id = adapter.currentList[position].id
@@ -54,7 +52,6 @@ open class SwipeToDeleteCallback(
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
         val itemView = viewHolder.itemView
-        if(viewHolder is TodosRVAdapter.AddViewHolder) return
 
         if (dX > 0) { // Swiping to the right
             val limitedDX =
@@ -81,7 +78,6 @@ open class SwipeToDeleteCallback(
     }
 
     override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
-        if(viewHolder is TodosRVAdapter.AddViewHolder) return super.getSwipeThreshold(viewHolder)
         return if (viewHolder.itemView.translationX > 0) 10f else super.getSwipeThreshold(viewHolder)
     }
 }

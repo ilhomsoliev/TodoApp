@@ -1,17 +1,25 @@
 package com.ilhomsoliev.todo.feature.add
 
 import android.app.DatePickerDialog
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.app.MainActivity
 import com.ilhomsoliev.todo.core.formatDate
+import com.ilhomsoliev.todo.core.printToLog
 import com.ilhomsoliev.todo.data.models.TodoPriority
 import com.ilhomsoliev.todo.databinding.FragmentAddBinding
 import com.ilhomsoliev.todo.feature.add.model.AddAction
@@ -25,6 +33,7 @@ import java.util.Calendar
 
 
 class AddFragment : Fragment() {
+
 
     companion object {
         private const val ARG_ID = "arg_id"
@@ -102,7 +111,11 @@ class AddFragment : Fragment() {
     private fun setupListeners() {
         with(binding) {
             textViewSave.setOnClickListener {
-                viewModel.obtainEvent(AddEvent.Add(editTextDescription.text.toString()))
+                viewModel.obtainEvent(
+                    AddEvent.Add(
+                        editTextDescription.text.toString()
+                    )
+                )
             }
 
             iconClose.setOnClickListener {
@@ -113,13 +126,6 @@ class AddFragment : Fragment() {
                 viewModel.obtainEvent(AddEvent.Delete)
             }
 
-            layoutDeadlinePicker.setOnClickListener {
-                showDatePickerDialog({ timeInMillis ->
-                    viewModel.obtainEvent(AddEvent.DeadlineChange(timeInMillis))
-                }) {
-
-                }
-            }
             switchDeadline.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     showDatePickerDialog({ timeInMillis ->
@@ -147,8 +153,15 @@ class AddFragment : Fragment() {
                 }
                 popupMenu.show()
             }
-        }
 
+            editTextDescription.onFocusChangeListener =
+                View.OnFocusChangeListener { v, hasFocus ->
+                    hasFocus.printToLog("Hello ")
+                    if (!hasFocus) {
+                        viewModel.obtainEvent(AddEvent.TextChange(editTextDescription.text.toString()))
+                    }
+                }
+        }
     }
 
     private fun showDatePickerDialog(
@@ -181,7 +194,7 @@ class AddFragment : Fragment() {
     }
 
     private fun popBack() {
-        (activity as MainActivity).navigateToHomeFragment()
+        (activity as MainActivity).navigator.navigateToHomeFragment()
     }
 
 }

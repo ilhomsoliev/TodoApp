@@ -24,6 +24,20 @@ import kotlinx.coroutines.launch
 
 val repository: TodoItemsRepository = TodoItemsRepositoryImpl()
 
+/*interface NavProvider {
+    val navigator: MainActivity.Navigator
+}
+
+
+@Singleton
+class NavProviderImpl: NavProvider {
+    override lateinit var navigator: MainActivity.Navigator
+        private set
+    fun set(nav: MainActivity.Navigator) {
+        navigator = nav
+    }
+}*/
+
 class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels { HomeViewModelFactory(repository) }
@@ -55,13 +69,13 @@ class HomeFragment : Fragment() {
         todoAdapter = TodosRVAdapter(
             onClick = { todo ->
                 val id = todo.id
-                (activity as MainActivity).navigateToAddFragment(id)
+                (activity as MainActivity).navigator.navigateToAddFragment(id)
             },
             onUpdate = { todo ->
                 viewModel.obtainEvent(HomeEvent.MarkItem(todo.id))
             },
-            onAddClick = {
-                (activity as MainActivity).navigateToAddFragment("-1")
+            onDelete = {
+                viewModel.obtainEvent(HomeEvent.DeleteItem(it.id))
             }
         )
 
@@ -70,7 +84,7 @@ class HomeFragment : Fragment() {
             adapter = todoAdapter
         }
 
-      val swipeHandler = object : SwipeToDeleteCallback(
+        val swipeHandler = object : SwipeToDeleteCallback(
             adapter = todoAdapter,
             onSwipeLeft = { id ->
                 viewModel.obtainEvent(HomeEvent.DeleteItem(id))
@@ -112,11 +126,14 @@ class HomeFragment : Fragment() {
     private fun setupListeners() {
         with(binding) {
             floatingActionButtonAdd.setOnClickListener {
-                (activity as MainActivity).navigateToAddFragment("-1")
+                (activity as MainActivity).navigator.navigateToAddFragment("-1")
             }
 
             iconIsCompletedVisible.setOnClickListener {
                 viewModel.obtainEvent(HomeEvent.ToggleIsCompletedVisible)
+            }
+            layoutAddNewTodo.root.setOnClickListener {
+                (activity as MainActivity).navigator.navigateToAddFragment("-1")
             }
         }
     }
