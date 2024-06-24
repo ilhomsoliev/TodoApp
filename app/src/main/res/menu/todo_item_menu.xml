@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_item_edit"
+        android:title="Edit" />
+
+    <item
+        android:id="@+id/menu_item_delete"
+        android:title="Delete" />
+
+    <item
+
+        android:id="@+id/menu_item_mark_as_done"
+        android:actionLayout="@layout/menu_item_layout"
+        android:title="Mark as done" />
+
+</menu>

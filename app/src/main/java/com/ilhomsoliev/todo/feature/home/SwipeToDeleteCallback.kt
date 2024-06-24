@@ -30,6 +30,7 @@ open class SwipeToDeleteCallback(
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
         val position = viewHolder.layoutPosition
         val id = adapter.currentList[position].id
         if (direction == ItemTouchHelper.LEFT) {
@@ -51,9 +52,10 @@ open class SwipeToDeleteCallback(
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
         val itemView = viewHolder.itemView
+
         if (dX > 0) { // Swiping to the right
             val limitedDX =
-                dX.coerceAtMost(itemView.width / 4f) // Limit the swipe distance to 1/4 of the item's width
+                dX.coerceAtMost(itemView.width / 4f)
             c.drawRect(
                 itemView.left.toFloat(),
                 itemView.top.toFloat(),
@@ -61,6 +63,7 @@ open class SwipeToDeleteCallback(
                 itemView.bottom.toFloat(),
                 donePaint
             )
+
             itemView.translationX = limitedDX
         } else if (dX < 0) { // Swiping to the left
             c.drawRect(

@@ -51,7 +51,7 @@ class HomeViewModel(
     private fun markTodoAsDoneAt(id: String) {
         val response = repository.markTodoAsValue(id)
         if (!response) {
-            // TODO
+            viewAction = HomeAction.ShowSnackbar("Нету этой записи")
         }
     }
 }

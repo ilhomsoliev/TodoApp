@@ -8,5 +8,5 @@ sealed class AddEvent {
     data class TextChange(val text: String) : AddEvent()
     data class PriorityChange(val priority: TodoPriority) : AddEvent()
     data class DeadlineChange(val date: Long?) : AddEvent()
-    data class DeadlineSwitchClick(val value: Boolean) : AddEvent()
+    data object Delete : AddEvent()
 }

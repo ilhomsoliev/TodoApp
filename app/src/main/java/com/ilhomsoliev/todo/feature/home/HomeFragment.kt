@@ -14,12 +14,29 @@ import com.ilhomsoliev.todo.app.MainActivity
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepositoryImpl
 import com.ilhomsoliev.todo.databinding.FragmentHomeBinding
+import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
+import com.ilhomsoliev.todo.shared.showCustomSnackbar
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 val repository: TodoItemsRepository = TodoItemsRepositoryImpl()
+
+/*interface NavProvider {
+    val navigator: MainActivity.Navigator
+}
+
+
+@Singleton
+class NavProviderImpl: NavProvider {
+    override lateinit var navigator: MainActivity.Navigator
+        private set
+    fun set(nav: MainActivity.Navigator) {
+        navigator = nav
+    }
+}*/
 
 class HomeFragment : Fragment() {
 
@@ -44,22 +61,21 @@ class HomeFragment : Fragment() {
         initViews()
 
         subscribeToViewState()
-        subscribeToActions()
+        subscribeToActions(view)
         setupListeners()
     }
 
     private fun initViews() {
-
         todoAdapter = TodosRVAdapter(
             onClick = { todo ->
                 val id = todo.id
-                (activity as MainActivity).navigateToAddFragment(id)
+                (activity as MainActivity).navigator.navigateToAddFragment(id)
             },
             onUpdate = { todo ->
                 viewModel.obtainEvent(HomeEvent.MarkItem(todo.id))
             },
-            onAddClick = {
-                (activity as MainActivity).navigateToAddFragment("-1")
+            onDelete = {
+                viewModel.obtainEvent(HomeEvent.DeleteItem(it.id))
             }
         )
 
@@ -83,33 +99,41 @@ class HomeFragment : Fragment() {
     }
 
     private fun subscribeToViewState() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.viewStates().collectLatest { state: HomeViewState ->
                 with(binding) {
                     todoAdapter.submitList(state.todos)
                     textViewCompletedTodosCount.text = "Выполнено — ${state.completedCount}"
                     iconIsCompletedVisible.setImageResource(
-                        if (state.isShowCompletedEnabled) R.drawable.baseline_visibility_off_24 else R.drawable.eye_active
+                        if (state.isShowCompletedEnabled) R.drawable.eye_off else R.drawable.eye_active
                     )
                 }
             }
         }
     }
 
-    private fun subscribeToActions() {
-        lifecycleScope.launch {
-
+    private fun subscribeToActions(view: View) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.viewActions().onEach { action ->
+                when (action) {
+                    is HomeAction.ShowSnackbar -> showCustomSnackbar(view, action.text)
+                    null -> {}
+                }
+            }
         }
     }
 
     private fun setupListeners() {
         with(binding) {
             floatingActionButtonAdd.setOnClickListener {
-                (activity as MainActivity).navigateToAddFragment("-1")
+                (activity as MainActivity).navigator.navigateToAddFragment("-1")
             }
 
             iconIsCompletedVisible.setOnClickListener {
                 viewModel.obtainEvent(HomeEvent.ToggleIsCompletedVisible)
+            }
+            layoutAddNewTodo.root.setOnClickListener {
+                (activity as MainActivity).navigator.navigateToAddFragment("-1")
             }
         }
     }

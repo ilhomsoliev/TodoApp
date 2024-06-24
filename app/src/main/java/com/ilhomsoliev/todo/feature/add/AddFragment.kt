@@ -1,11 +1,18 @@
 package com.ilhomsoliev.todo.feature.add
 
 import android.app.DatePickerDialog
+import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +33,7 @@ import java.util.Calendar
 
 
 class AddFragment : Fragment() {
+
 
     companion object {
         private const val ARG_ID = "arg_id"
@@ -75,6 +83,11 @@ class AddFragment : Fragment() {
                         textViewDeadline.visibility = View.VISIBLE
                         textViewDeadline.text = formatDate(state.deadline)
                     }
+                    if (state.deadline != null) {
+                        switchDeadline.isChecked = true
+                    } else {
+                        switchDeadline.isChecked = false
+                    }
                 }
             }
         }
@@ -83,8 +96,6 @@ class AddFragment : Fragment() {
     private fun subscribeToActions(view: View) {
         lifecycleScope.launch {
             viewModel.viewActions().collectLatest { action ->
-                action.printToLog("Here 1r")
-
                 when (action) {
                     is AddAction.NavigateBack -> popBack()
                     is AddAction.ShowSnackbar -> {
@@ -100,7 +111,11 @@ class AddFragment : Fragment() {
     private fun setupListeners() {
         with(binding) {
             textViewSave.setOnClickListener {
-                viewModel.obtainEvent(AddEvent.Add(editTextDescription.text.toString()))
+                viewModel.obtainEvent(
+                    AddEvent.Add(
+                        editTextDescription.text.toString()
+                    )
+                )
             }
 
             iconClose.setOnClickListener {
@@ -108,22 +123,17 @@ class AddFragment : Fragment() {
             }
 
             layoutRemoveAddTodo.setOnClickListener {
-                popBack()
+                viewModel.obtainEvent(AddEvent.Delete)
             }
 
-            layoutDeadlinePicker.setOnClickListener {
-                showDatePickerDialog { timeInMillis ->
-                    viewModel.obtainEvent(AddEvent.DeadlineChange(timeInMillis))
-                }
-            }
             switchDeadline.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    showDatePickerDialog { timeInMillis ->
+                    showDatePickerDialog({ timeInMillis ->
                         viewModel.obtainEvent(AddEvent.DeadlineChange(timeInMillis))
+                    }) {
+//                        if()
                     }
-                    viewModel.obtainEvent(AddEvent.DeadlineSwitchClick(true))
                 } else {
-                    viewModel.obtainEvent(AddEvent.DeadlineSwitchClick(false))
                     viewModel.obtainEvent(AddEvent.DeadlineChange(null))
                 }
             }
@@ -143,11 +153,21 @@ class AddFragment : Fragment() {
                 }
                 popupMenu.show()
             }
-        }
 
+            editTextDescription.onFocusChangeListener =
+                View.OnFocusChangeListener { v, hasFocus ->
+                    hasFocus.printToLog("Hello ")
+                    if (!hasFocus) {
+                        viewModel.obtainEvent(AddEvent.TextChange(editTextDescription.text.toString()))
+                    }
+                }
+        }
     }
 
-    private fun showDatePickerDialog(onDateSet: (currentTimeMillis: Long) -> Unit) {
+    private fun showDatePickerDialog(
+        onDateSet: (currentTimeMillis: Long) -> Unit,
+        onCancelled: () -> Unit
+    ) {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -165,14 +185,16 @@ class AddFragment : Fragment() {
                 },
                 year,
                 month,
-                day
+                day,
             )
-
+        datePickerDialog.setOnCancelListener {
+            onCancelled()
+        }
         datePickerDialog.show()
     }
 
     private fun popBack() {
-        (activity as MainActivity).navigateToHomeFragment()
+        (activity as MainActivity).navigator.navigateToHomeFragment()
     }
 
 }

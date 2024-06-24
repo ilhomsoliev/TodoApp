@@ -54,5 +54,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // Lifecycle extensions
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation (libs.androidx.cardview)
 }
