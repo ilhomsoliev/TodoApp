@@ -30,6 +30,8 @@ class HomeViewModel(
                 viewState = viewState.copy(isShowCompletedEnabled = newValue)
                 repository.setShowCompleted(newValue)
             }
+
+            else -> {}
         }
     }
 
