@@ -162,7 +162,7 @@ fun AddDisplay(
                             )
                             state.deadline?.let {
                                 Text(
-                                    text = state.date.toString(),
+                                    text = state.date,
                                     color = AppTheme.colorScheme.blue,
                                     fontSize = 16.sp
                                 )
@@ -197,6 +197,4 @@ fun AddDisplay(
             }
         )
     }
-
-
 }

@@ -5,14 +5,19 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.ilhomsoliev.todo.R
+import com.ilhomsoliev.todo.app.navigation.Navigation
 import com.ilhomsoliev.todo.feature.add.AddFragment
 import com.ilhomsoliev.todo.feature.home.HomeFragment
 
@@ -27,13 +32,14 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         window.statusBarColor = ContextCompat.getColor(this, R.color.backPrimary)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.backPrimary)
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContent {
+            val navController: NavHostController = rememberNavController()
+            Navigation(
+                modifier = Modifier,
+                navController = navController,
+            )
         }
-        replaceFragment(HomeFragment())
+
     }
 
     private fun replaceFragment(fragment: Fragment) {
