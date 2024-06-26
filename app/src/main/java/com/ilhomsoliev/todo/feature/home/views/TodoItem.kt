@@ -1,6 +1,7 @@
 package com.ilhomsoliev.todo.feature.home.views
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -64,9 +65,12 @@ fun TodoItem(
         targetValue = if (item.isCompleted) AppTheme.colorScheme.green else AppTheme.colorScheme.labelTertiary,
         animationSpec = tween(durationMillis = 200), label = ""
     )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
+//            .animateItemPlacement()
+            .animateContentSize()
             .clip(
                 if (isFirst) RoundedCornerShape(
                     topEnd = 12.dp,

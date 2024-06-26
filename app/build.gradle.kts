@@ -62,6 +62,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation("io.coil-kt:coil-compose:2.3.0")
     implementation("androidx.compose.material3:material3-window-size-class")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
     // Fragment KTX
     implementation(libs.androidx.fragment.ktx)
     // ViewModel
