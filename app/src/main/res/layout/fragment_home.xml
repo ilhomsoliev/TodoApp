@@ -73,7 +73,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewTodos"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
 
                 <include
                     android:id="@+id/layoutAddNewTodo"
@@ -82,7 +83,6 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

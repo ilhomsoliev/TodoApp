@@ -68,8 +68,7 @@ class HomeFragment : Fragment() {
     private fun initViews() {
         todoAdapter = TodosRVAdapter(
             onClick = { todo ->
-                val id = todo.id
-                (activity as MainActivity).navigator.navigateToAddFragment(id)
+                (activity as MainActivity).navigator.navigateToAddFragment(todo.id)
             },
             onUpdate = { todo ->
                 viewModel.obtainEvent(HomeEvent.MarkItem(todo.id))
@@ -103,7 +102,8 @@ class HomeFragment : Fragment() {
             viewModel.viewStates().collectLatest { state: HomeViewState ->
                 with(binding) {
                     todoAdapter.submitList(state.todos)
-                    textViewCompletedTodosCount.text = "Выполнено — ${state.completedCount}"
+                    textViewCompletedTodosCount.text =
+                        getString(R.string.done_number, state.completedCount)
                     iconIsCompletedVisible.setImageResource(
                         if (state.isShowCompletedEnabled) R.drawable.eye_off else R.drawable.eye_active
                     )

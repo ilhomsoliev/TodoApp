@@ -9,6 +9,9 @@ import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class AddViewModel(
     private val repository: TodoItemsRepository
@@ -20,7 +23,7 @@ class AddViewModel(
                 val response = repository.insertTodo(
                     TodoItemModel(
                         id = viewState.id ?: generateRandomString(),
-                        text = viewEvent.text,
+                        text = viewState.text,
                         priority = viewState.priority,
                         deadline = viewState.deadline,
                         isCompleted = false,
@@ -40,7 +43,7 @@ class AddViewModel(
             }
 
             is AddEvent.PriorityChange -> {
-                viewState = viewState.copy(priority = viewEvent.priority, )
+                viewState = viewState.copy(priority = viewEvent.priority)
             }
 
             is AddEvent.TextChange -> {
@@ -64,6 +67,23 @@ class AddViewModel(
                 }
                 viewAction = AddAction.NavigateBack
             }
+
+            is AddEvent.DateDialogIsActiveChange -> {
+                viewState = viewState.copy(dateDialogActive = viewEvent.value)
+            }
+
+            is AddEvent.OnDateChange -> {
+                val selectedDate = Calendar.getInstance().apply {
+                    timeInMillis = viewEvent.selectedDateMillis
+                }
+                val dateFormatter = SimpleDateFormat("dd.MM.yyyy")
+                viewState = viewState.copy(
+                    date = dateFormatter.format(selectedDate.time),
+                    deadline = viewEvent.selectedDateMillis,
+                )
+            }
+
+            else -> {}
         }
     }
 }

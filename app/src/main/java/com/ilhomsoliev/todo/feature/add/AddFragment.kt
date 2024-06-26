@@ -1,18 +1,16 @@
 package com.ilhomsoliev.todo.feature.add
 
 import android.app.DatePickerDialog
-import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -25,8 +23,10 @@ import com.ilhomsoliev.todo.databinding.FragmentAddBinding
 import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
+import com.ilhomsoliev.todo.feature.add.views.AddDisplay
 import com.ilhomsoliev.todo.feature.home.repository
 import com.ilhomsoliev.todo.shared.showCustomSnackbar
+import com.ilhomsoliev.todo.shared.theme.TodoTheme
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -60,15 +60,46 @@ class AddFragment : Fragment() {
         id?.let {
             viewModel.obtainEvent(AddEvent.EnterScreen(id))
         }
-        _binding = FragmentAddBinding.inflate(inflater, container, false)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                TodoTheme {
+                    AddScreen()
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun AddScreen() {
+        val state by viewModel.viewStates().collectAsState()
+        val actions by viewModel.viewActions().collectAsState(initial = null)
+
+        LaunchedEffect(key1 = actions) {
+            when (val action = actions) {
+                is AddAction.NavigateBack -> popBack()
+                is AddAction.ShowSnackbar -> {
+                    view?.let { showCustomSnackbar(it, action.text) }
+                }
+
+                null -> {}
+            }
+        }
+
+        AddDisplay(
+            state = state,
+            callback = {
+                when (it) {
+                    is AddEvent.OnBack -> popBack()
+                    else -> viewModel.obtainEvent(it)
+                }
+            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        subscribeToViewState()
+        /*subscribeToViewState()
         subscribeToActions(view)
-        setupListeners()
+        setupListeners()*/
     }
 
     private fun subscribeToViewState() {
@@ -96,14 +127,7 @@ class AddFragment : Fragment() {
     private fun subscribeToActions(view: View) {
         lifecycleScope.launch {
             viewModel.viewActions().collectLatest { action ->
-                when (action) {
-                    is AddAction.NavigateBack -> popBack()
-                    is AddAction.ShowSnackbar -> {
-                        showCustomSnackbar(view, action.text)
-                    }
 
-                    null -> {}
-                }
             }
         }
     }
@@ -112,9 +136,7 @@ class AddFragment : Fragment() {
         with(binding) {
             textViewSave.setOnClickListener {
                 viewModel.obtainEvent(
-                    AddEvent.Add(
-                        editTextDescription.text.toString()
-                    )
+                    AddEvent.Add
                 )
             }
 
