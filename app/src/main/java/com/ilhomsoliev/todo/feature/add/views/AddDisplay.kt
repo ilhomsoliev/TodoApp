@@ -208,6 +208,7 @@ fun AddDisplay(
                         tint = AppTheme.colorScheme.red
                     )
                     SpacerH(value = 6.dp)
+
                     Text(text = stringResource(R.string.delete), color = AppTheme.colorScheme.red)
 
                 }

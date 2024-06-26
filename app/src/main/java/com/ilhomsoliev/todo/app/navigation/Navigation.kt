@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -24,9 +26,13 @@ val repository: TodoItemsRepository = TodoItemsRepositoryImpl()
 fun Navigation(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    snackbarHostState: SnackbarHostState,
 ) {
     Scaffold(
         modifier = Modifier.padding(WindowInsets.ime.asPaddingValues()),
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
     ) { innerPadding ->
         NavHost(
             modifier = modifier.padding(innerPadding),

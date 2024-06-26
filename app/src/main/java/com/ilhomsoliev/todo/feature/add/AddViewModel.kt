@@ -28,10 +28,10 @@ class AddViewModel(
                         editedDate = null,
                     )
                 )
-                viewAction = if (response) {
-                    AddAction.NavigateBack
+                if (response) {
+                    viewAction = AddAction.NavigateBack
                 } else {
-                    AddAction.ShowSnackbar("Заполните поля")
+                    showSnackbarMessage("Заполните поля")
                 }
             }
 
@@ -89,6 +89,7 @@ class AddViewModel(
                     viewState = viewState.copy(deadline = null)
                 }
             }
+
             else -> {}
         }
     }

@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
@@ -11,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.app.navigation.Navigation
 import com.ilhomsoliev.todo.shared.theme.TodoTheme
+import com.master.core.viewmodel.snackbar.ProvideSnackbarController
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,10 +26,19 @@ class MainActivity : AppCompatActivity() {
         setContent {
             TodoTheme {
                 val navController: NavHostController = rememberNavController()
-                Navigation(
-                    modifier = Modifier,
-                    navController = navController,
-                )
+                val snackbarHostState = remember { SnackbarHostState() }
+                val coroutineScope = rememberCoroutineScope()
+
+                ProvideSnackbarController(
+                    snackbarHostState = snackbarHostState,
+                    coroutineScope = coroutineScope
+                ) {
+                    Navigation(
+                        modifier = Modifier,
+                        navController = navController,
+                        snackbarHostState = snackbarHostState,
+                    )
+                }
             }
         }
     }

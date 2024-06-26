@@ -1,8 +1,11 @@
 package com.ilhomsoliev.todo.core
 
 
+import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.master.core.viewmodel.snackbar.model.SnackbarMessage
+import com.master.core.viewmodel.snackbar.model.UserMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -21,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-public abstract class BaseSharedViewModel<State : Any, Action, Event>(initialState: State) :
+abstract class BaseSharedViewModel<State : Any, Action, Event>(initialState: State) :
     ViewModel() {
 
     private val _viewStates = MutableStateFlow(initialState)
@@ -32,9 +35,9 @@ public abstract class BaseSharedViewModel<State : Any, Action, Event>(initialSta
             onBufferOverflow = BufferOverflow.DROP_OLDEST
         )
 
-    public fun viewStates(): WrappedStateFlow<State> = WrappedStateFlow(_viewStates.asStateFlow())
+    fun viewStates(): WrappedStateFlow<State> = WrappedStateFlow(_viewStates.asStateFlow())
 
-    public fun viewActions(): WrappedSharedFlow<Action?> =
+    fun viewActions(): WrappedSharedFlow<Action?> =
         WrappedSharedFlow(_viewActions.asSharedFlow())
 
     protected var viewState: State
@@ -49,7 +52,7 @@ public abstract class BaseSharedViewModel<State : Any, Action, Event>(initialSta
             _viewActions.tryEmit(value)
         }
 
-    public abstract fun obtainEvent(viewEvent: Event)
+    abstract fun obtainEvent(viewEvent: Event)
 
     /**
      * Convenient method to perform work in [viewModelScope] scope.
@@ -61,9 +64,37 @@ public abstract class BaseSharedViewModel<State : Any, Action, Event>(initialSta
         viewModelScope.launch(context = context, block = block)
     }
 
-    public fun clear() {
+    fun clear() {
         //coroutineTags.forEach { it.value.cancel() }
         onCleared()
+    }
+
+    // Snackbar
+    private val _snackbarMessage = MutableStateFlow<SnackbarMessage?>(null)
+    val snackbarMessage = _snackbarMessage.asStateFlow()
+
+    internal fun showSnackbarMessage(
+        message: String,
+        actionLabel: String? = null,
+        onActionPerformed: () -> Unit = {},
+    ) {
+        _snackbarMessage.value = SnackbarMessage.from(
+            userMessage = UserMessage.from(message),
+            actionLabelMessage = if (actionLabel != null) UserMessage.from(actionLabel) else null,
+            withDismissAction = true,
+            onSnackbarResult = {
+                if (it == SnackbarResult.ActionPerformed)
+                    onActionPerformed()
+            }
+        )
+    }
+
+    fun dismissSnackbar() = run { _snackbarMessage.value = null }
+
+    fun showSnackbarMessage(message: String) {
+        _snackbarMessage.value = SnackbarMessage.from(
+            userMessage = UserMessage.from(message),
+        )
     }
 
 }
