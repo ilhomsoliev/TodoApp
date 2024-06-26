@@ -18,7 +18,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.app.navigation.Navigation
-import com.ilhomsoliev.todo.feature.add.AddFragment
 import com.ilhomsoliev.todo.feature.home.HomeFragment
 
 
@@ -52,22 +51,9 @@ class MainActivity : AppCompatActivity() {
 
     inner class Navigator {
         fun navigateToAddFragment(id: String) {
-            val addFragment = AddFragment.newInstance(id)
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.place_holder, addFragment)
-                .addToBackStack(null)
-                .commit()
+
         }
 
-        fun navigateToHomeFragment() {
-            supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-            val homeFragment = HomeFragment()
-            supportFragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.place_holder, homeFragment)
-                .commit()
-        }
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
