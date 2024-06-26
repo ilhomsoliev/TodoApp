@@ -3,7 +3,7 @@ package com.ilhomsoliev.todo.feature.add.model
 import com.ilhomsoliev.todo.data.models.TodoPriority
 
 sealed class AddEvent {
-    data class EnterScreen(val id: String) : AddEvent()
+    data class EnterScreen(val id: String?) : AddEvent()
     data object Add : AddEvent()
     data class TextChange(val text: String) : AddEvent()
     data class PriorityChange(val priority: TodoPriority) : AddEvent()

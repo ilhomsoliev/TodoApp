@@ -51,13 +51,15 @@ class AddViewModel(
             }
 
             is AddEvent.EnterScreen -> {
-                repository.getTodoById(viewEvent.id)?.let { todo ->
-                    viewState = viewState.copy(
-                        id = todo.id,
-                        text = todo.text,
-                        priority = todo.priority,
-                        deadline = todo.deadline,
-                    )
+                viewEvent.id?.let {
+                    repository.getTodoById(it)?.let { todo ->
+                        viewState = viewState.copy(
+                            id = todo.id,
+                            text = todo.text,
+                            priority = todo.priority,
+                            deadline = todo.deadline,
+                        )
+                    }
                 }
             }
 

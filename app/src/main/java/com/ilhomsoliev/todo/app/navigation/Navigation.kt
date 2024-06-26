@@ -36,13 +36,15 @@ fun Navigation(
             composable(Screens.Home.route) {
                 val viewModel = remember { HomeViewModel(repository) }
                 HomeScreen(vm = viewModel, goAddTodo = {
-
+                    navController.navigate(Screens.Add.buildRoute(it))
                 })
             }
             composable(Screens.Add.route) {
                 val viewModel = remember { AddViewModel(repository) }
-                AddScreen(vm = viewModel, onBack = {
+                val id = Screens.Add.getId(it)
 
+                AddScreen(vm = viewModel, id = id, onBack = {
+                    navController.popBackStack()
                 })
             }
         }
