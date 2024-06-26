@@ -10,6 +10,7 @@ sealed class AddEvent {
     data class DeadlineChange(val date: Long?) : AddEvent()
     data object Delete : AddEvent()
     data object OnBack : AddEvent()
+    data class OnSwitchChange(val value: Boolean) : AddEvent()
     data class DateDialogIsActiveChange(val value: Boolean) : AddEvent()
     data class OnDateChange(val selectedDateMillis: Long) : AddEvent()
 }

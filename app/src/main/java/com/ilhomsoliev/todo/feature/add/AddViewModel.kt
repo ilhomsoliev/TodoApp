@@ -82,6 +82,13 @@ class AddViewModel(
                 )
             }
 
+            is AddEvent.OnSwitchChange -> {
+                if (viewEvent.value) {
+                    obtainEvent(AddEvent.DateDialogIsActiveChange(true))
+                } else {
+                    viewState = viewState.copy(deadline = null)
+                }
+            }
             else -> {}
         }
     }

@@ -7,4 +7,6 @@
     <string name="add_icon">Add icon</string>
     <string name="new_one">Новое</string>
     <string name="warning_icon">warning icon</string>
+    <string name="trash_icon">Trash icon</string>
+    <string name="delete">Удалить</string>
 </resources>

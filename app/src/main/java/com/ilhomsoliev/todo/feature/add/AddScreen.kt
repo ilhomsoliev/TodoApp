@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.views.AddDisplay
 
@@ -15,6 +16,13 @@ fun AddScreen(vm: AddViewModel, onBack: () -> Unit, id: String?) {
 
     LaunchedEffect(key1 = Unit) {
         vm.obtainEvent(AddEvent.EnterScreen(id))
+    }
+    LaunchedEffect(key1 = viewAction) {
+        when (viewAction) {
+            AddAction.NavigateBack -> onBack()
+//            is AddAction.ShowSnackbar -> TODO()
+            else -> {}
+        }
     }
 
     AddDisplay(state = viewState) {
