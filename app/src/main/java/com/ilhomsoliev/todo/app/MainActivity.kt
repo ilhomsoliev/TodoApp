@@ -10,15 +10,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.app.navigation.Navigation
-import com.ilhomsoliev.todo.feature.home.HomeFragment
 
 
 class MainActivity : AppCompatActivity() {

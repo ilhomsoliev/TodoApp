@@ -11,11 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
+import com.ilhomsoliev.todo.data.repository.TodoItemsRepositoryImpl
 import com.ilhomsoliev.todo.feature.add.AddScreen
 import com.ilhomsoliev.todo.feature.add.AddViewModel
 import com.ilhomsoliev.todo.feature.home.HomeScreen
 import com.ilhomsoliev.todo.feature.home.HomeViewModel
-import com.ilhomsoliev.todo.feature.home.repository
+
+val repository: TodoItemsRepository = TodoItemsRepositoryImpl()
 
 @Composable
 fun Navigation(
