@@ -1,7 +1,5 @@
 package com.ilhomsoliev.todo.feature.add
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
 import com.ilhomsoliev.todo.core.generateRandomString
 import com.ilhomsoliev.todo.data.models.TodoItemModel
@@ -11,7 +9,6 @@ import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 
 class AddViewModel(
     private val repository: TodoItemsRepository

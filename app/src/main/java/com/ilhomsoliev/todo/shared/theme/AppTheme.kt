@@ -31,5 +31,3 @@ object AppTheme {
         @Composable get() = LocalMAppTypography.current
 
 }
-
-// ProvideTextStyle(value = typography.bodyLarge, content = content) // interesting, can I apply it in project?

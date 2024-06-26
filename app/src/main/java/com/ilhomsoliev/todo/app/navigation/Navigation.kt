@@ -44,7 +44,7 @@ fun Navigation(
                 val id = Screens.Add.getId(it)
 
                 AddScreen(vm = viewModel, id = id, onBack = {
-                    navController.popBackStack()
+                    navController.navigateUp()
                 })
             }
         }

@@ -3,4 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="done_number">Выполнено — %d</string>
+    <string name="low_priority_icon">low priority icon</string>
+    <string name="add_icon">Add icon</string>
+    <string name="new_one">Новое</string>
+    <string name="warning_icon">warning icon</string>
 </resources>

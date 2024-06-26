@@ -20,6 +20,10 @@ fun HomeScreen(
                 goAddTodo(it.id)
             }
 
+            HomeEvent.AddClick -> {
+                goAddTodo(null)
+            }
+
             else -> vm.obtainEvent(it)
 
         }
