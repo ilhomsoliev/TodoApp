@@ -5,7 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.views.HomeDisplay
-import com.master.core.viewmodel.snackbar.SnackbarMessageHandler
+import com.ilhomsoliev.todo.shared.snackbar.SnackbarMessageHandler
 
 @Composable
 fun HomeScreen(

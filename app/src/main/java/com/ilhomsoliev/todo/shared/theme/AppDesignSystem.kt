@@ -34,15 +34,11 @@ data class MAppShape(
 
 @Stable
 data class MAppTypography(
-    val titleLarge: TextStyle,
-    val titleMedium: TextStyle,
-    val captionMedium: TextStyle,
-    val labelButton: TextStyle,
-    val headlineH2: TextStyle,
-    val body1: TextStyle,
-    val body2: TextStyle,
-    val body3: TextStyle,
-    val captionLarge: TextStyle,
+    val largeTitle: TextStyle,
+    val title: TextStyle,
+    val button: TextStyle,
+    val body: TextStyle,
+    val subhead: TextStyle,
 )
 
 val LocalMAppColorScheme = staticCompositionLocalOf {
@@ -67,14 +63,10 @@ val LocalMAppColorScheme = staticCompositionLocalOf {
 
 val LocalMAppTypography = staticCompositionLocalOf {
     MAppTypography(
-        titleLarge = TextStyle.Default,
-        titleMedium = TextStyle.Default,
-        captionMedium = TextStyle.Default,
-        labelButton = TextStyle.Default,
-        headlineH2 = TextStyle.Default,
-        body1 = TextStyle.Default,
-        body2 = TextStyle.Default,
-        body3 = TextStyle.Default,
-        captionLarge = TextStyle.Default,
+        largeTitle = TextStyle.Default,
+        title = TextStyle.Default,
+        button = TextStyle.Default,
+        body = TextStyle.Default,
+        subhead = TextStyle.Default,
     )
 }

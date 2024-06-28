@@ -37,8 +37,28 @@ import com.ilhomsoliev.todo.shared.theme.TodoTheme
 
 @Composable
 @Preview
-fun TodoItemPreview(modifier: Modifier = Modifier) {
+private fun TodoItemPreview(modifier: Modifier = Modifier) {
     TodoTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(AppTheme.colorScheme.backPrimary)
+        ) {
+            TodoItemModel.demos.fastForEachIndexed { index, todoItemModel ->
+                TodoItem(
+                    item = todoItemModel,
+                    isFirst = index == 0,
+                    onCheckedChange = {},
+                    onClick = {})
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+private fun TodoItemPreviewDark(modifier: Modifier = Modifier) {
+    TodoTheme(true) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

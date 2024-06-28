@@ -36,13 +36,20 @@ import com.ilhomsoliev.todo.shared.theme.TodoTheme
 
 @Composable
 @Preview
-fun HomeDisplayPreview() {
-    TodoTheme {
+private fun HomeDisplayPreview() {
+    TodoTheme(false) {
         HomeDisplay(state = HomeViewState(todos = TodoItemModel.demos)) {}
     }
 }
 
-@OptIn(ExperimentalMotionApi::class)
+@Composable
+@Preview
+private fun HomeDisplayPreviewDark() {
+    TodoTheme(true) {
+        HomeDisplay(state = HomeViewState(todos = TodoItemModel.demos)) {}
+    }
+}
+
 @Composable
 fun HomeDisplay(
     state: HomeViewState,

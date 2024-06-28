@@ -1,6 +1,33 @@
 package com.ilhomsoliev.todo.shared.theme
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.ilhomsoliev.todo.shared.theme.AppTheme.colorScheme
+import kotlin.reflect.full.memberProperties
+
+@Composable
+@Preview
+private fun PreviewColors() {
+    TodoTheme {
+        Column {
+            MAppColorScheme::class.memberProperties.forEach { property ->
+                val color = property.get(colorScheme) as Color
+                Box(
+                    modifier = Modifier
+                        .size(200.dp)
+                        .background(color)
+                )
+            }
+        }
+    }
+}
 
 internal val lightColorScheme = MAppColorScheme(
     supportSeparator = Color(0xFFE0E0E0),

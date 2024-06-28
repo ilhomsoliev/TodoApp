@@ -4,7 +4,7 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import com.ilhomsoliev.todo.shared.theme.AppTheme.typography
+
 
 @Composable
 fun TodoTheme(
@@ -18,7 +18,7 @@ fun TodoTheme(
     CompositionLocalProvider(
         LocalMAppColorScheme provides colorScheme,
         LocalIndication provides rippleIndication,
-        LocalMAppTypography provides typography,
+        LocalMAppTypography provides typography(),
         content = content,
     )
 }

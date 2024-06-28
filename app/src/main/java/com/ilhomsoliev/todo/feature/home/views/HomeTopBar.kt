@@ -28,8 +28,16 @@ import com.ilhomsoliev.todo.shared.theme.TodoTheme
 
 @Composable
 @Preview
-fun HomeTopBarPreview(modifier: Modifier = Modifier) {
-    TodoTheme {
+private fun HomeTopBarPreview() {
+    TodoTheme(false) {
+        HomeTopBar(12, false, {})
+    }
+}
+
+@Composable
+@Preview
+private fun HomeTopBarPreviewDark() {
+    TodoTheme(true) {
         HomeTopBar(12, false, {})
     }
 }

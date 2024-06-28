@@ -14,4 +14,5 @@
     <string name="todo_until">Сделать до</string>
     <string name="priority">Важность</string>
     <string name="save">Сохранить</string>
+    <string name="what_needs_to_be_done">Что надо сделать…</string>
 </resources>

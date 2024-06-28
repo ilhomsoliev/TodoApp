@@ -1,4 +1,4 @@
-package com.master.core.viewmodel.snackbar.model
+package com.ilhomsoliev.todo.shared.snackbar.model
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarResult

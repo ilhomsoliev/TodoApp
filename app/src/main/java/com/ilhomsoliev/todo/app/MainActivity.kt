@@ -14,7 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.app.navigation.Navigation
 import com.ilhomsoliev.todo.shared.theme.TodoTheme
-import com.master.core.viewmodel.snackbar.ProvideSnackbarController
+import com.ilhomsoliev.todo.shared.snackbar.ProvideSnackbarController
 
 
 class MainActivity : AppCompatActivity() {

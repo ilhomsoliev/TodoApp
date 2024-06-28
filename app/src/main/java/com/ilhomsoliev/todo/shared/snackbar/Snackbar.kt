@@ -1,4 +1,4 @@
-package com.master.core.viewmodel.snackbar
+package com.ilhomsoliev.todo.shared.snackbar
 
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -10,8 +10,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.master.core.viewmodel.snackbar.model.SnackbarMessage
-import com.master.core.viewmodel.snackbar.model.asString
+import com.ilhomsoliev.todo.shared.snackbar.model.SnackbarMessage
+import com.ilhomsoliev.todo.shared.snackbar.model.asString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

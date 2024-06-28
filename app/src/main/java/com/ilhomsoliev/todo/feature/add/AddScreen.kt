@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.views.AddDisplay
-import com.master.core.viewmodel.snackbar.SnackbarMessageHandler
+import com.ilhomsoliev.todo.shared.snackbar.SnackbarMessageHandler
 
 @Composable
 fun AddScreen(vm: AddViewModel, onBack: () -> Unit, id: String?) {

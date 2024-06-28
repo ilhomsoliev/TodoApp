@@ -1,4 +1,4 @@
-package com.master.core.viewmodel.snackbar.model
+package com.ilhomsoliev.todo.shared.snackbar.model
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable

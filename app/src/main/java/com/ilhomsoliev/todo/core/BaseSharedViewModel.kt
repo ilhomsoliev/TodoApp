@@ -4,8 +4,8 @@ package com.ilhomsoliev.todo.core
 import androidx.compose.material3.SnackbarResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.master.core.viewmodel.snackbar.model.SnackbarMessage
-import com.master.core.viewmodel.snackbar.model.UserMessage
+import com.ilhomsoliev.todo.shared.snackbar.model.SnackbarMessage
+import com.ilhomsoliev.todo.shared.snackbar.model.UserMessage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
