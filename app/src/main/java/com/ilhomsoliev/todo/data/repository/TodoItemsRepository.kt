@@ -7,11 +7,11 @@ interface TodoItemsRepository {
 
     fun getTodos(): Flow<List<TodoItemModel>>
     fun getDoneTodosAmount(): Flow<Int>
-    fun getTodoById(todoId: String): TodoItemModel?
-    fun insertTodo(todo: TodoItemModel): Boolean
-    fun deleteTodo(todoId: String): Boolean
-    fun setShowCompleted(showCompleted: Boolean)
+    suspend fun getTodoById(todoId: String): TodoItemModel?
+    suspend fun insertTodo(todo: TodoItemModel): Boolean
+    suspend fun deleteTodo(todoId: String): Boolean
+    suspend fun setShowCompleted(showCompleted: Boolean)
     fun getShowCompleted(): Flow<Boolean>
-    fun markTodoAsValue(todoId: String, value: Boolean? = null): Boolean // switches value if null
+    suspend fun markTodoAsValue(todoId: String, value: Boolean? = null): Boolean // switches value if null
 
 }

@@ -8,14 +8,13 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntOffset
@@ -60,10 +59,9 @@ fun SwipeableItem(
                 }
             }
     ) {
-        // Icons for swipe actions
         if (offsetX.value > 0) {
             Icon(
-                imageVector = Icons.Default.Edit,
+                imageVector = Icons.Default.Done,
                 contentDescription = "Edit",
                 tint = Color.White,
                 modifier = Modifier

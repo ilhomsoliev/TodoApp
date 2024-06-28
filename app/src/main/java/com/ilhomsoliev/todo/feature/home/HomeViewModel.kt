@@ -21,9 +21,11 @@ class HomeViewModel(
             }
 
             HomeEvent.ToggleIsCompletedVisible -> {
-                val newValue = !viewState.isShowCompletedEnabled
-                viewState = viewState.copy(isShowCompletedEnabled = newValue)
-                repository.setShowCompleted(newValue)
+                withViewModelScope {
+                    val newValue = !viewState.isShowCompletedEnabled
+                    viewState = viewState.copy(isShowCompletedEnabled = newValue)
+                    repository.setShowCompleted(newValue)
+                }
             }
 
             else -> {}
@@ -49,13 +51,17 @@ class HomeViewModel(
     }
 
     private fun deleteTodoAt(todoId: String) {
-        repository.deleteTodo(todoId)
+        withViewModelScope {
+            repository.deleteTodo(todoId)
+        }
     }
 
     private fun markTodoAsDoneAt(id: String) {
-        val response = repository.markTodoAsValue(id)
-        if (!response) {
-            viewAction = HomeAction.ShowSnackbar("Нету этой записи")
+        withViewModelScope {
+            val response = repository.markTodoAsValue(id)
+            if (!response) {
+                viewAction = HomeAction.ShowSnackbar("Нету этой записи")
+            }
         }
     }
 }

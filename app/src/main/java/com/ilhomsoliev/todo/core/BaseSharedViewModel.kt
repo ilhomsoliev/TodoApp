@@ -58,7 +58,7 @@ abstract class BaseSharedViewModel<State : Any, Action, Event>(initialState: Sta
      * Convenient method to perform work in [viewModelScope] scope.
      */
     protected fun withViewModelScope(
-        context: CoroutineContext = EmptyCoroutineContext,
+        context: CoroutineContext = Dispatchers.IO,
         block: suspend CoroutineScope.() -> Unit
     ) {
         viewModelScope.launch(context = context, block = block)

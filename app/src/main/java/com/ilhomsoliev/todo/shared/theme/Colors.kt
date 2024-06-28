@@ -2,8 +2,11 @@ package com.ilhomsoliev.todo.shared.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,20 +15,24 @@ import androidx.compose.ui.unit.dp
 import com.ilhomsoliev.todo.shared.theme.AppTheme.colorScheme
 import kotlin.reflect.full.memberProperties
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 @Preview
 private fun PreviewColors() {
     TodoTheme {
-        Column {
+        FlowRow(modifier = Modifier.fillMaxWidth()) {
             MAppColorScheme::class.memberProperties.forEach { property ->
                 val color = property.get(colorScheme) as Color
                 Box(
                     modifier = Modifier
-                        .size(200.dp)
+                        .size(150.dp)
                         .background(color)
-                )
+                ) {
+                    Text(text = property.name)
+                }
             }
         }
+
     }
 }
 

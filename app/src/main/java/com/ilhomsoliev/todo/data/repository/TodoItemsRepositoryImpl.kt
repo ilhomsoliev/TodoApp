@@ -133,8 +133,8 @@ class TodoItemsRepositoryImpl : TodoItemsRepository {
 
     private val _showCompleted = MutableStateFlow(false)
 
-    override fun setShowCompleted(showCompleted: Boolean) {
-        _showCompleted.value = showCompleted
+    override suspend fun setShowCompleted(showCompleted: Boolean) {
+        _showCompleted.emit(showCompleted)
     }
 
     override fun getShowCompleted(): Flow<Boolean> {
@@ -151,32 +151,32 @@ class TodoItemsRepositoryImpl : TodoItemsRepository {
         }
 
     override fun getDoneTodosAmount(): Flow<Int> = _todos.map {
-        it.count { it.isCompleted }
+        it.count { item -> item.isCompleted }
     }
 
-    override fun getTodoById(todoId: String): TodoItemModel? =
+    override suspend fun getTodoById(todoId: String): TodoItemModel? =
         _todos.value.firstOrNull { it.id == todoId }
 
-    override fun insertTodo(todo: TodoItemModel): Boolean {
+    override suspend fun insertTodo(todo: TodoItemModel): Boolean {
         if (todo.text.isEmpty()) return false
         val id = _todos.value.indexOfFirst { it.id == todo.id }
-        if (id == -1) _todos.value += listOf(todo)
-        else _todos.value = _todos.value.toMutableList().apply { set(id, todo) }
+        if (id == -1) _todos.emit(_todos.value + listOf(todo))
+        else _todos.emit(_todos.value.toMutableList().apply { set(id, todo) })
         return true
     }
 
-    override fun deleteTodo(todoId: String): Boolean {
+    override suspend fun deleteTodo(todoId: String): Boolean {
         val item = _todos.value.firstOrNull { it.id == todoId }
         if (item == null) return false
-        _todos.value -= item
+        _todos.emit(_todos.value - item)
         return true
     }
 
-    override fun markTodoAsValue(todoId: String, value: Boolean?): Boolean {
+    override suspend fun markTodoAsValue(todoId: String, value: Boolean?): Boolean {
         val id = _todos.value.indexOfFirst { it.id == todoId }
         if (id == -1) return false
         val newValue = _todos.value[id].copy(isCompleted = !_todos.value[id].isCompleted)
-        _todos.value = _todos.value.toMutableList().apply { set(id, newValue) }
+        _todos.emit(_todos.value.toMutableList().apply { set(id, newValue) })
         return true
     }
 
