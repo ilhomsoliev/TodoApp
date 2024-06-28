@@ -108,7 +108,7 @@ fun AddDisplay(
                         modifier = Modifier.clickable {
                             callback(AddEvent.Add)
                         },
-                        text = "Сохранить",
+                        text = stringResource(R.string.save),
                         color = Color(0xFF007AFF),
                     )
                 }
@@ -138,7 +138,7 @@ fun AddDisplay(
                         expanded = !expanded
                     }) {
                     Text(
-                        text = "Важность",
+                        text = stringResource(R.string.priority),
                         color = AppTheme.colorScheme.labelPrimary,
                         fontSize = 16.sp
                     )
@@ -180,7 +180,7 @@ fun AddDisplay(
                     ) {
                         Column {
                             Text(
-                                text = "Сделать до",
+                                text = stringResource(R.string.todo_until),
                                 color = AppTheme.colorScheme.labelPrimary,
                                 fontSize = 16.sp
                             )

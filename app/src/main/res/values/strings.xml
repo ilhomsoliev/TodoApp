@@ -11,4 +11,7 @@
     <string name="show_completed_tasks">Show completed tasks</string>
     <string name="my_tasks_todo_s">Мои дела</string>
     <string name="completed_todo_s">Выполнено – %1$s</string>
+    <string name="todo_until">Сделать до</string>
+    <string name="priority">Важность</string>
+    <string name="save">Сохранить</string>
 </resources>
