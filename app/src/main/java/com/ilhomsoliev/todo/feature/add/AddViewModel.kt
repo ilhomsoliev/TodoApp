@@ -59,7 +59,7 @@ class AddViewModel(
                             text = todo.text,
                             priority = todo.priority,
                             deadline = todo.deadline,
-//                            date = dateFormatter.format(selectedDate.time),
+                            date = todo.deadline?.let { it1 -> getDateForDeadline(it1) } ?: "",
                         )
                     }
                 }
@@ -77,12 +77,8 @@ class AddViewModel(
             }
 
             is AddEvent.OnDateChange -> {
-                val selectedDate = Calendar.getInstance().apply {
-                    timeInMillis = viewEvent.selectedDateMillis
-                }
-                val dateFormatter = SimpleDateFormat("dd.MM.yyyy")
                 viewState = viewState.copy(
-                    date = dateFormatter.format(selectedDate.time),
+                    date = getDateForDeadline(viewEvent.selectedDateMillis),
                     deadline = viewEvent.selectedDateMillis,
                 )
             }
@@ -97,6 +93,14 @@ class AddViewModel(
 
             else -> {}
         }
+    }
+
+    private fun getDateForDeadline(timeInMillis: Long): String {
+        val selectedDate = Calendar.getInstance().apply {
+            this.timeInMillis = timeInMillis
+        }
+        val dateFormatter = SimpleDateFormat("dd.MM.yyyy")
+        return dateFormatter.format(selectedDate.time)
     }
 
 }
