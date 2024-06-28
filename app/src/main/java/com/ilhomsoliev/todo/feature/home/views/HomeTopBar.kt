@@ -71,7 +71,8 @@ fun HomeTopBar(
                         text = stringResource(R.string.my_tasks_todo_s),
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = AppTheme.colorScheme.labelPrimary
+                        style = AppTheme.typography.title.copy(AppTheme.colorScheme.labelPrimary),
+//                        color = AppTheme.colorScheme.labelPrimary
                     )
                     Text(
                         text = stringResource(

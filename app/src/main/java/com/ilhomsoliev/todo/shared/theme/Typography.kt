@@ -21,7 +21,6 @@ private fun TypographyPreview(modifier: Modifier = Modifier) {
             Text(text = "Body — 16/20", style = AppTheme.typography.body)
             Text(text = "Subhead — 14/20", style = AppTheme.typography.subhead)
         }
-
     }
 }
 
@@ -36,40 +35,34 @@ private fun TypographyPreviewDark(modifier: Modifier = Modifier) {
             Text(text = "Body — 16/20", style = AppTheme.typography.body)
             Text(text = "Subhead — 14/20", style = AppTheme.typography.subhead)
         }
-
     }
 }
 
 @Composable
-fun typography(modifier: Modifier = Modifier): MAppTypography {
+fun typography(): MAppTypography {
     return MAppTypography(
         largeTitle = TextStyle(
-            fontSize = 11.sp,
-            lineHeight = 12.sp,
+            fontSize = 32.sp,
             color = AppTheme.colorScheme.labelPrimary,
-            fontWeight = FontWeight(400),
+            fontWeight = FontWeight(500),
         ),
         title = TextStyle(
-            fontSize = 11.sp,
-            lineHeight = 12.sp,
+            fontSize = 20.sp,
             color = AppTheme.colorScheme.labelPrimary,
-            fontWeight = FontWeight(400),
+            fontWeight = FontWeight(500),
         ),
         button = TextStyle(
-            fontSize = 11.sp,
-            lineHeight = 12.sp,
+            fontSize = 14.sp,
             color = AppTheme.colorScheme.labelPrimary,
-            fontWeight = FontWeight(400),
+            fontWeight = FontWeight(500),
         ),
         body = TextStyle(
-            fontSize = 11.sp,
-            lineHeight = 12.sp,
+            fontSize = 16.sp,
             color = AppTheme.colorScheme.labelPrimary,
-            fontWeight = FontWeight(400),
+            fontWeight = FontWeight(500),
         ),
         subhead = TextStyle(
-            fontSize = 11.sp,
-            lineHeight = 12.sp,
+            fontSize = 14.sp,
             color = AppTheme.colorScheme.labelPrimary,
             fontWeight = FontWeight(400),
         ),
