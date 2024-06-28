@@ -10,17 +10,16 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
-import com.ilhomsoliev.todo.data.repository.TodoItemsRepositoryImpl
+import com.ilhomsoliev.todo.app.TodoApplication
 import com.ilhomsoliev.todo.feature.add.AddScreen
 import com.ilhomsoliev.todo.feature.add.AddViewModel
 import com.ilhomsoliev.todo.feature.home.HomeScreen
 import com.ilhomsoliev.todo.feature.home.HomeViewModel
 
-val repository: TodoItemsRepository = TodoItemsRepositoryImpl()
 
 @Composable
 fun Navigation(
@@ -28,6 +27,8 @@ fun Navigation(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         modifier = Modifier.padding(WindowInsets.ime.asPaddingValues()),
         snackbarHost = {
@@ -40,13 +41,15 @@ fun Navigation(
             startDestination = Screens.Home.route
         ) {
             composable(Screens.Home.route) {
-                val viewModel = remember { HomeViewModel(repository) }
+                val viewModel =
+                    remember { HomeViewModel((context.applicationContext as TodoApplication).repository) }
                 HomeScreen(vm = viewModel, goAddTodo = {
                     navController.navigate(Screens.Add.buildRoute(it))
                 })
             }
             composable(Screens.Add.route) {
-                val viewModel = remember { AddViewModel(repository) }
+                val viewModel =
+                    remember { AddViewModel((context.applicationContext as TodoApplication).repository) }
                 val id = Screens.Add.getId(it)
 
                 AddScreen(vm = viewModel, id = id, onBack = {
