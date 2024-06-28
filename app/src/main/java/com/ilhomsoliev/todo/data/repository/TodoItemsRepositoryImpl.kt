@@ -4,6 +4,7 @@ import com.ilhomsoliev.todo.data.models.TodoItemModel
 import com.ilhomsoliev.todo.data.models.TodoPriority
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 
@@ -89,6 +90,10 @@ class TodoItemsRepositoryImpl : TodoItemsRepository {
 
     override fun setShowCompleted(showCompleted: Boolean) {
         _showCompleted.value = showCompleted
+    }
+
+    override fun getShowCompleted(): Flow<Boolean> {
+        return _showCompleted.asStateFlow()
     }
 
     override fun getTodos(): Flow<List<TodoItemModel>> =

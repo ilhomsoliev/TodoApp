@@ -41,6 +41,11 @@ class HomeViewModel(
                 viewState = viewState.copy(completedCount = it)
             }
         }
+        withViewModelScope {
+            repository.getShowCompleted().collect {
+                viewState = viewState.copy(isShowCompletedEnabled = it)
+            }
+        }
     }
 
     private fun deleteTodoAt(todoId: String) {

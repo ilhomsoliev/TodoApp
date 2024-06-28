@@ -11,6 +11,7 @@ interface TodoItemsRepository {
     fun insertTodo(todo: TodoItemModel): Boolean
     fun deleteTodo(todoId: String): Boolean
     fun setShowCompleted(showCompleted: Boolean)
+    fun getShowCompleted(): Flow<Boolean>
     fun markTodoAsValue(todoId: String, value: Boolean? = null): Boolean // switches value if null
 
 }
