@@ -1,6 +1,7 @@
 package com.ilhomsoliev.todo.feature.home
 
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
+import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
@@ -35,12 +36,20 @@ class HomeViewModel(
     init {
         withViewModelScope {
             repository.getTodos().collect {
-                viewState = viewState.copy(todos = it)
+                if (it is ResultState.Success) {
+                    viewState = viewState.copy(todos = it.data)
+                } else {
+                    viewAction = HomeAction.ShowSnackbar("Some error while loading")
+                }
             }
         }
         withViewModelScope {
             repository.getDoneTodosAmount().collect {
-                viewState = viewState.copy(completedCount = it)
+                if (it is ResultState.Success) {
+                    viewState = viewState.copy(completedCount = it.data)
+                } else {
+                    viewAction = HomeAction.ShowSnackbar("Some error while loading amount")
+                }
             }
         }
         withViewModelScope {
@@ -59,7 +68,7 @@ class HomeViewModel(
     private fun markTodoAsDoneAt(id: String) {
         withViewModelScope {
             val response = repository.markTodoAsValue(id)
-            if (!response) {
+            if (response is ResultState.Error) {
                 viewAction = HomeAction.ShowSnackbar("Нету этой записи")
             }
         }

@@ -1,6 +1,7 @@
 package com.ilhomsoliev.todo.feature.add
 
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
+import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.core.generateRandomString
 import com.ilhomsoliev.todo.data.models.TodoItemModel
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
@@ -29,7 +30,7 @@ class AddViewModel(
                             editedDate = null,
                         )
                     )
-                    if (response) {
+                    if (response is ResultState.Success) {
                         viewAction = AddAction.NavigateBack
                     } else {
                         showSnackbarMessage("Заполните поля")
@@ -52,14 +53,17 @@ class AddViewModel(
             is AddEvent.EnterScreen -> {
                 withViewModelScope {
                     viewEvent.id?.let {
-                        repository.getTodoById(it)?.let { todo ->
-                            viewState = viewState.copy(
-                                id = todo.id,
-                                text = todo.text,
-                                priority = todo.priority,
-                                deadline = todo.deadline,
-                                date = todo.deadline?.let { it1 -> getDateForDeadline(it1) } ?: "",
-                            )
+                        repository.getTodoById(it).let { todo ->
+                            if (todo is ResultState.Success) {
+                                viewState = viewState.copy(
+                                    id = todo.data.id,
+                                    text = todo.data.text,
+                                    priority = todo.data.priority,
+                                    deadline = todo.data.deadline,
+                                    date = todo.data.deadline?.let { it1 -> getDateForDeadline(it1) }
+                                        ?: "",
+                                )
+                            }
                         }
                     }
                 }
