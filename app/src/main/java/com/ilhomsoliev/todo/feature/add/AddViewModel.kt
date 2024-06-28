@@ -50,11 +50,16 @@ class AddViewModel(
             is AddEvent.EnterScreen -> {
                 viewEvent.id?.let {
                     repository.getTodoById(it)?.let { todo ->
+                        /*val selectedDate = Calendar.getInstance().apply {
+                            timeInMillis = todo.deadline
+                        }
+                        val dateFormatter = SimpleDateFormat("dd.MM.yyyy")*/
                         viewState = viewState.copy(
                             id = todo.id,
                             text = todo.text,
                             priority = todo.priority,
                             deadline = todo.deadline,
+//                            date = dateFormatter.format(selectedDate.time),
                         )
                     }
                 }
@@ -93,4 +98,5 @@ class AddViewModel(
             else -> {}
         }
     }
+
 }

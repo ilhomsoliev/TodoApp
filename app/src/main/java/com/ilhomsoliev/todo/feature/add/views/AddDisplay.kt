@@ -47,12 +47,20 @@ import com.ilhomsoliev.todo.shared.date_picker.DatePickerDialog
 import com.ilhomsoliev.todo.shared.textfield.FeedbackTextField
 import com.ilhomsoliev.todo.shared.theme.AppTheme
 import com.ilhomsoliev.todo.shared.theme.TodoTheme
-import java.time.LocalDate
+import java.util.Calendar
 
 @Composable
 @Preview
 fun AddDisplayPreview() {
     TodoTheme {
+        AddDisplay(state = AddViewState(), {})
+    }
+}
+
+@Composable
+@Preview
+fun AddDisplayPreviewDark() {
+    TodoTheme(isDarkTheme = true) {
         AddDisplay(state = AddViewState(), {})
     }
 }
@@ -73,7 +81,8 @@ fun AddDisplay(
         }
 
         override fun isSelectableYear(year: Int): Boolean {
-            val currentYear = LocalDate.now().year
+            val calendar = Calendar.getInstance()
+            val currentYear = calendar.get(Calendar.YEAR)
             return year >= currentYear
         }
     })

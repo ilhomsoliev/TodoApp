@@ -30,6 +30,7 @@ import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.data.models.TodoItemModel
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
+import com.ilhomsoliev.todo.shared.SwipeableItem
 import com.ilhomsoliev.todo.shared.theme.AppTheme
 import com.ilhomsoliev.todo.shared.theme.TodoTheme
 
@@ -48,60 +49,14 @@ fun HomeDisplay(
     callback: (HomeEvent) -> Unit,
 ) {
     val listState = rememberLazyListState()
-    /*val context = LocalContext.current
 
-    val motionScene = remember {
-        """
-        {
-          ConstraintSets: {
-            start: {
-              topBar: {
-                width: "spread",
-                height: 100,
-                start: ['parent', 'start', 16],
-                end: ['parent', 'end', 16],
-                top: ['parent', 'top', 16]
-              }
-            },
-            end: {
-              topBar: {
-                width: "spread",
-                height: 56,
-                start: ['parent', 'start', 16],
-                end: ['parent', 'end', 16],
-                top: ['parent', 'top', 16]
-              }
-            }
-          },
-          Transitions: {
-            default: {
-              from: 'start',
-              to: 'end',
-              pathMotionArc: 'none',
-              KeyFrames: {
-                KeyAttributes: [
-                  {
-                    target: ['topBar'],
-                    frames: [25, 50, 75, 100],
-                    alpha: [1, 0.75, 0.5, 0]
-                  }
-                ]
-              }
-            }
-          }
-        }
-        """
-    }
-    var progress by remember { mutableStateOf(0f) }
-
-    LaunchedEffect(listState.firstVisibleItemScrollOffset) {
-        val scrollOffset = listState.firstVisibleItemScrollOffset
-        progress = (scrollOffset / 600f).coerceIn(0f, 1f)
-    }*/
     Scaffold(
         containerColor = AppTheme.colorScheme.backPrimary,
         topBar = {
-            HomeTopBar(completedItemsCount = state.completedCount, state.isShowCompletedEnabled) {
+            HomeTopBar(
+                completedItemsCount = state.completedCount,
+                showCompleted = state.isShowCompletedEnabled
+            ) {
                 callback(HomeEvent.ToggleIsCompletedVisible)
             }
         },
@@ -124,12 +79,24 @@ fun HomeDisplay(
                 .padding(horizontal = 12.dp),
             state = listState,
         ) {
-            itemsIndexed(state.todos, key = { index, item -> item.id }) { index, item ->
-                TodoItem(item, onCheckedChange = {
-                    callback(HomeEvent.MarkItem(item.id))
-                }, isFirst = index == 0, onClick = {
-                    callback(HomeEvent.ItemClick(item.id))
-                })
+            itemsIndexed(state.todos, key = { _, item -> item.id }) { index, item ->
+                SwipeableItem(
+                    Modifier.clip(
+                        if (index == 0) RoundedCornerShape(
+                            topEnd = 12.dp,
+                            topStart = 12.dp
+                        ) else RoundedCornerShape(0.dp)
+                    ), onSwipeLeft = {
+                        callback(HomeEvent.DeleteItem(item.id))
+                    }, onSwipeRight = {
+                        callback(HomeEvent.MarkItem(item.id))
+                    }) {
+                    TodoItem(item, onCheckedChange = {
+                        callback(HomeEvent.MarkItem(item.id))
+                    }, isFirst = index == 0, onClick = {
+                        callback(HomeEvent.ItemClick(item.id))
+                    })
+                }
             }
             item {
                 Row(
