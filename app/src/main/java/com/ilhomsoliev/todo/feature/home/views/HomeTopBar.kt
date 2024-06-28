@@ -1,25 +1,22 @@
 package com.ilhomsoliev.todo.feature.home.views
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ilhomsoliev.todo.R
@@ -30,7 +27,7 @@ import com.ilhomsoliev.todo.shared.theme.TodoTheme
 @Preview
 private fun HomeTopBarPreview() {
     TodoTheme(false) {
-        HomeTopBar(12, false, {})
+        HomeTopBar(12, false, 0.dp, {})
     }
 }
 
@@ -38,34 +35,27 @@ private fun HomeTopBarPreview() {
 @Preview
 private fun HomeTopBarPreviewDark() {
     TodoTheme(true) {
-        HomeTopBar(12, false, {})
+        HomeTopBar(12, false, 4.dp, {})
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(
     completedItemsCount: Int,
     showCompleted: Boolean,
+    elevation: Dp,
     onEyeIconClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .background(AppTheme.colorScheme.backPrimary),
+    Surface(
+        contentColor = AppTheme.colorScheme.backPrimary,
+        shadowElevation = elevation
     ) {
-        Surface(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, start = 8.dp, end = 8.dp)
-                .height(64.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .background(AppTheme.colorScheme.backPrimary),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        TopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = AppTheme.colorScheme.backPrimary),
+            title = {
                 Column(
                     modifier = Modifier
-                        .weight(1f),
                 ) {
                     Text(
                         text = stringResource(R.string.my_tasks_todo_s),
@@ -83,6 +73,8 @@ fun HomeTopBar(
                         color = AppTheme.colorScheme.labelTertiary
                     )
                 }
+
+            }, actions = {
                 IconButton(
                     onClick = onEyeIconClick
                 ) {
@@ -94,7 +86,6 @@ fun HomeTopBar(
                         tint = AppTheme.colorScheme.blue
                     )
                 }
-            }
-        }
+            })
     }
 }
