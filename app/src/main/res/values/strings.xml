@@ -1,5 +1,18 @@
 <resources>
     <string name="app_name">ToDo</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="done_number">Выполнено — %d</string>
+    <string name="low_priority_icon">low priority icon</string>
+    <string name="add_icon">Add icon</string>
+    <string name="new_one">Новое</string>
+    <string name="warning_icon">warning icon</string>
+    <string name="trash_icon">Trash icon</string>
+    <string name="delete">Удалить</string>
+    <string name="hide_completed_tasks">Hide completed tasks</string>
+    <string name="show_completed_tasks">Show completed tasks</string>
+    <string name="my_tasks_todo_s">Мои дела</string>
+    <string name="completed_todo_s">Выполнено – %1$s</string>
+    <string name="todo_until">Сделать до</string>
+    <string name="priority">Важность</string>
+    <string name="save">Сохранить</string>
+    <string name="what_needs_to_be_done">Что надо сделать…</string>
 </resources>

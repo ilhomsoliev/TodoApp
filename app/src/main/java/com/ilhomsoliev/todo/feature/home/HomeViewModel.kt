@@ -1,15 +1,11 @@
 package com.ilhomsoliev.todo.feature.home
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
+import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 class HomeViewModel(
     private val repository: TodoItemsRepository
@@ -26,43 +22,55 @@ class HomeViewModel(
             }
 
             HomeEvent.ToggleIsCompletedVisible -> {
-                val newValue = !viewState.isShowCompletedEnabled
-                viewState = viewState.copy(isShowCompletedEnabled = newValue)
-                repository.setShowCompleted(newValue)
+                withViewModelScope {
+                    val newValue = !viewState.isShowCompletedEnabled
+                    viewState = viewState.copy(isShowCompletedEnabled = newValue)
+                    repository.setShowCompleted(newValue)
+                }
             }
+
+            else -> {}
         }
     }
 
     init {
-        repository.getTodos().onEach {
-            viewState = viewState.copy(todos = it)
-        }.launchIn(viewModelScope)
-
-        repository.getDoneTodosAmount().onEach {
-            viewState = viewState.copy(completedCount = it)
-        }.launchIn(viewModelScope)
-
+        withViewModelScope {
+            repository.getTodos().collect {
+                if (it is ResultState.Success) {
+                    viewState = viewState.copy(todos = it.data)
+                } else {
+                    viewAction = HomeAction.ShowSnackbar("Some error while loading")
+                }
+            }
+        }
+        withViewModelScope {
+            repository.getDoneTodosAmount().collect {
+                if (it is ResultState.Success) {
+                    viewState = viewState.copy(completedCount = it.data)
+                } else {
+                    viewAction = HomeAction.ShowSnackbar("Some error while loading amount")
+                }
+            }
+        }
+        withViewModelScope {
+            repository.getShowCompleted().collect {
+                viewState = viewState.copy(isShowCompletedEnabled = it)
+            }
+        }
     }
 
     private fun deleteTodoAt(todoId: String) {
-        repository.deleteTodo(todoId)
+        withViewModelScope {
+            repository.deleteTodo(todoId)
+        }
     }
 
     private fun markTodoAsDoneAt(id: String) {
-        val response = repository.markTodoAsValue(id)
-        if (!response) {
-            viewAction = HomeAction.ShowSnackbar("Нету этой записи")
+        withViewModelScope {
+            val response = repository.markTodoAsValue(id)
+            if (response is ResultState.Error) {
+                viewAction = HomeAction.ShowSnackbar("Нету этой записи")
+            }
         }
-    }
-}
-
-class HomeViewModelFactory(private val repository: TodoItemsRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return HomeViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

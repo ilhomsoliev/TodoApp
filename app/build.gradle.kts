@@ -30,6 +30,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    buildFeatures.compose = true
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -45,9 +49,21 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.activity:activity-compose")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation("androidx.compose.material3:material3-window-size-class")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
+    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.8.21")
     // Fragment KTX
     implementation(libs.androidx.fragment.ktx)
     // ViewModel
@@ -55,4 +71,5 @@ dependencies {
     // Lifecycle extensions
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation (libs.androidx.cardview)
+    debugImplementation(libs.androidx.ui.tooling)
 }

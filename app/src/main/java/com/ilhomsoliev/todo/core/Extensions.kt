@@ -4,7 +4,8 @@ import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-private val IS_DEBUG: Boolean = true // TODO BuildConfig.DEBUG
+
+private const val IS_DEBUG: Boolean = true // BuildConfig.DEBUG
 
 fun generateRandomString(
     length: Int = 20,

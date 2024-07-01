@@ -1,14 +1,15 @@
 package com.ilhomsoliev.todo.feature.add
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
+import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.core.generateRandomString
 import com.ilhomsoliev.todo.data.models.TodoItemModel
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 class AddViewModel(
     private val repository: TodoItemsRepository
@@ -17,21 +18,23 @@ class AddViewModel(
     override fun obtainEvent(viewEvent: AddEvent) {
         when (viewEvent) {
             is AddEvent.Add -> {
-                val response = repository.insertTodo(
-                    TodoItemModel(
-                        id = viewState.id ?: generateRandomString(),
-                        text = viewEvent.text,
-                        priority = viewState.priority,
-                        deadline = viewState.deadline,
-                        isCompleted = false,
-                        createdDate = System.currentTimeMillis(),
-                        editedDate = null,
+                withViewModelScope {
+                    val response = repository.insertTodo(
+                        TodoItemModel(
+                            id = viewState.id ?: generateRandomString(),
+                            text = viewState.text,
+                            priority = viewState.priority,
+                            deadline = viewState.deadline,
+                            isCompleted = false,
+                            createdDate = System.currentTimeMillis(),
+                            editedDate = null,
+                        )
                     )
-                )
-                viewAction = if (response) {
-                    AddAction.NavigateBack
-                } else {
-                    AddAction.ShowSnackbar("Заполните поля")
+                    if (response is ResultState.Success) {
+                        viewAction = AddAction.NavigateBack
+                    } else {
+                        showSnackbarMessage("Заполните поля")
+                    }
                 }
             }
 
@@ -40,7 +43,7 @@ class AddViewModel(
             }
 
             is AddEvent.PriorityChange -> {
-                viewState = viewState.copy(priority = viewEvent.priority, )
+                viewState = viewState.copy(priority = viewEvent.priority)
             }
 
             is AddEvent.TextChange -> {
@@ -48,33 +51,62 @@ class AddViewModel(
             }
 
             is AddEvent.EnterScreen -> {
-                repository.getTodoById(viewEvent.id)?.let { todo ->
-                    viewState = viewState.copy(
-                        id = todo.id,
-                        text = todo.text,
-                        priority = todo.priority,
-                        deadline = todo.deadline,
-                    )
+                withViewModelScope {
+                    viewEvent.id?.let {
+                        repository.getTodoById(it).let { todo ->
+                            if (todo is ResultState.Success) {
+                                viewState = viewState.copy(
+                                    id = todo.data.id,
+                                    text = todo.data.text,
+                                    priority = todo.data.priority,
+                                    deadline = todo.data.deadline,
+                                    date = todo.data.deadline?.let { it1 -> getDateForDeadline(it1) }
+                                        ?: "",
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
             AddEvent.Delete -> {
-                viewState.id?.let {
-                    repository.deleteTodo(it)
+                withViewModelScope {
+                    viewState.id?.let {
+                        repository.deleteTodo(it)
+                    }
+                    viewAction = AddAction.NavigateBack
                 }
-                viewAction = AddAction.NavigateBack
             }
-        }
-    }
-}
 
-class AddViewModelFactory(private val repository: TodoItemsRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AddViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return AddViewModel(repository) as T
+            is AddEvent.DateDialogIsActiveChange -> {
+                viewState = viewState.copy(dateDialogActive = viewEvent.value)
+            }
+
+            is AddEvent.OnDateChange -> {
+                viewState = viewState.copy(
+                    date = getDateForDeadline(viewEvent.selectedDateMillis),
+                    deadline = viewEvent.selectedDateMillis,
+                )
+            }
+
+            is AddEvent.OnSwitchChange -> {
+                if (viewEvent.value) {
+                    obtainEvent(AddEvent.DateDialogIsActiveChange(true))
+                } else {
+                    viewState = viewState.copy(deadline = null)
+                }
+            }
+
+            else -> {}
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
+
+    private fun getDateForDeadline(timeInMillis: Long): String {
+        val selectedDate = Calendar.getInstance().apply {
+            this.timeInMillis = timeInMillis
+        }
+        val dateFormatter = SimpleDateFormat("dd.MM.yyyy")
+        return dateFormatter.format(selectedDate.time)
+    }
+
 }
