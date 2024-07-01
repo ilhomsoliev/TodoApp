@@ -1,6 +1,9 @@
 [versions]
 agp = "8.4.2"
 cardview = "1.0.0"
+coilCompose = "2.6.0"
+composeBom = "2024.06.00"
+constraintlayoutCompose = "1.0.1"
 fragmentKtx = "1.8.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -8,6 +11,15 @@ junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 appcompat = "1.7.0"
+kotlinReflect = "1.9.24"
+kotlinxSerializationJson = "1.6.3"
+ktorClientAuth = "2.3.11"
+ktorClientContentNegotiation = "2.3.11"
+ktorClientCore = "2.3.11"
+ktorClientLogging = "2.3.11"
+ktorClientOkhttp = "2.3.8"
+ktorSerializationJackson = "2.2.1"
+ktorSerializationKotlinxJson = "2.3.11"
 lifecycleViewmodelKtx = "2.8.2"
 material = "1.12.0"
 activity = "1.9.0"
@@ -18,15 +30,33 @@ navigationRuntimeKtx = "2.7.7"
 navigationCompose = "2.7.7"
 
 [libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose" }
 androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflect" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorClientAuth" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientContentNegotiation" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientCore" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientLogging" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktorClientOkhttp" }
+ktor-serialization-jackson = { module = "io.ktor:ktor-serialization-jackson", version.ref = "ktorSerializationJackson" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorSerializationKotlinxJson" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
