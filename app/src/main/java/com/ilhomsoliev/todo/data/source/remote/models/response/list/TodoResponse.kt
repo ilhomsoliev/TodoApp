@@ -1,10 +1,10 @@
 package com.ilhomsoliev.todo.data.source.remote.models.response.list
 
 data class TodoResponse(
-    val changed_at: Int,
+    val changed_at: Long,
     val color: String,
-    val created_at: Int,
-    val deadline: Int,
+    val created_at: Long,
+    val deadline: Long,
     val done: Boolean,
     val id: String,
     val importance: String,

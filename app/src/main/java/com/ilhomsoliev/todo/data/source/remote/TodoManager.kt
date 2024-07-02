@@ -9,6 +9,7 @@ import com.ilhomsoliev.todo.data.source.remote.models.request.TodoRequest
 import com.ilhomsoliev.todo.data.source.remote.models.response.delete.DeleteTodoResponse
 import com.ilhomsoliev.todo.data.source.remote.models.response.edit.EditTodoResponse
 import com.ilhomsoliev.todo.data.source.remote.models.response.getById.GetTodoResponse
+import com.ilhomsoliev.todo.data.source.remote.models.response.list.TodoResponse
 import com.ilhomsoliev.todo.data.source.remote.models.response.list.TodosResponse
 import io.ktor.client.request.headers
 import io.ktor.client.request.setBody
@@ -55,7 +56,7 @@ class TodoManager(
         }
 
     suspend fun editTodo(revision: Int, todo: TodoRequest) =
-        webSource.tryPostResult("${NetworkConstants.PREFIX}/list/${todo.id}") {
+        webSource.tryPutResult("${NetworkConstants.PREFIX}/list/${todo.id}") {
             headers {
                 append("Authorization", NetworkConstants.TOKEN)
                 append("X-Last-Known-Revision", revision.toString())
@@ -75,7 +76,7 @@ class TodoManager(
         }
 
     suspend fun deleteTodo(revision: Int, todoId: String) =
-        webSource.tryPostResult("${NetworkConstants.PREFIX}/list/$todoId") {
+        webSource.tryDeleteResult("${NetworkConstants.PREFIX}/list/$todoId") {
             headers {
                 append("Authorization", NetworkConstants.TOKEN)
                 append("X-Last-Known-Revision", revision.toString())
@@ -92,9 +93,27 @@ class TodoManager(
                 ResultState.Error(it.exceptionOrNull().toString())
             }
         }
+    suspend fun getTodoById(revision: Int, todoId: String) =
+        webSource.tryGetResult("${NetworkConstants.PREFIX}/list/$todoId") {
+            headers {
+                append("Authorization", NetworkConstants.TOKEN)
+                append("X-Last-Known-Revision", revision.toString())
+            }
+        }.let {
+            if (it.isSuccess) {
+                val convert = it.getOrNull()?.wrapped<GetTodoResponse>()
+                if (convert != null) {
+                    ResultState.Success(convert)
+                } else {
+                    ResultState.Error("Null error couldn't convert")
+                }
+            } else {
+                ResultState.Error(it.exceptionOrNull().toString())
+            }
+        }
 
     suspend fun updateList(revision: Int, todos: List<TodoRequest>) =
-        webSource.tryPostResult("${NetworkConstants.PREFIX}/list") {
+        webSource.tryPatchResult("${NetworkConstants.PREFIX}/list") {
             headers {
                 append("Authorization", NetworkConstants.TOKEN)
                 append("X-Last-Known-Revision", revision.toString())
