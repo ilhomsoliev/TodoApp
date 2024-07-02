@@ -99,7 +99,6 @@ dependencies {
     //Room
     val room = "2.6.1"
     implementation("androidx.room:room-runtime:$room")
-    implementation("androidx.room:room-paging:$room")
     implementation("androidx.room:room-runtime:$room")
     implementation("androidx.room:room-ktx:$room")
     kapt("androidx.room:room-compiler:$room")
