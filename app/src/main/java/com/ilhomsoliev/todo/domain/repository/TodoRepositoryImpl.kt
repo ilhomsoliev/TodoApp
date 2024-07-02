@@ -12,7 +12,7 @@ class TodoRepositoryImpl(
     private val todoManager: TodoManager
 ) : TodoRepository {
     override suspend fun getTodos(): ResultState<List<TodoModel>> {
-        todoManager.getTodos().map {
+        return todoManager.getTodos().map {
             dataStoreManager.changeRevision(it.revision)
             it.revision
             it.list.map { it.map() }

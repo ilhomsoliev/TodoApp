@@ -3,6 +3,7 @@ package com.ilhomsoliev.todo.feature.home
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
 import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
+import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: TodoItemsRepository
+    private val repository: TodoRepository
 ) : BaseSharedViewModel<HomeViewState, HomeAction, HomeEvent>(HomeViewState()) {
 
     override fun obtainEvent(viewEvent: HomeEvent) {

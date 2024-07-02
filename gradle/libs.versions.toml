@@ -5,6 +5,8 @@ coilCompose = "2.6.0"
 composeBom = "2024.06.00"
 constraintlayoutCompose = "1.0.1"
 fragmentKtx = "1.8.0"
+hiltAndroid = "2.49"
+hiltCompiler = "2.49"
 koinAndroid = "3.2.2"
 koinAndroidxCompose = "3.2.1"
 koinCore = "3.2.1"
@@ -47,6 +49,8 @@ androidx-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
