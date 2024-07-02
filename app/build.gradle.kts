@@ -1,9 +1,23 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
 //    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
+}
+
+
+fun getLocalProperty(propertyName: String, project: Project): String? {
+    val propertiesFile = project.rootProject.file("local.properties")
+    if (propertiesFile.exists()) {
+        val properties = Properties()
+        properties.load(FileInputStream(propertiesFile))
+        return properties.getProperty(propertyName)
+    }
+    return null
 }
 
 android {
@@ -16,8 +30,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "TOKEN", "\"${getLocalProperty("TOKEN", project)}\"")
     }
 
     buildTypes {
