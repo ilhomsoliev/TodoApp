@@ -1,10 +1,9 @@
 package com.ilhomsoliev.todo.di
 
-import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
-import com.ilhomsoliev.todo.data.repository.TodoItemsRepositoryImpl
+import com.ilhomsoliev.todo.domain.repository.TodoRepository
+import com.ilhomsoliev.todo.domain.repository.TodoRepositoryImpl
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -14,6 +13,6 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun provideRepository(todoItemsRepositoryImpl:TodoItemsRepositoryImpl): TodoItemsRepository
+    abstract fun provideRepository(todoRepositoryImpl: TodoRepositoryImpl): TodoRepository
 
 }

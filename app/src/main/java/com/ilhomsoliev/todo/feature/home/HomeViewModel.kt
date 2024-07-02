@@ -2,7 +2,6 @@ package com.ilhomsoliev.todo.feature.home
 
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
 import com.ilhomsoliev.todo.core.ResultState
-import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
@@ -29,7 +28,7 @@ class HomeViewModel @Inject constructor(
                 withViewModelScope {
                     val newValue = !viewState.isShowCompletedEnabled
                     viewState = viewState.copy(isShowCompletedEnabled = newValue)
-                    repository.setShowCompleted(newValue)
+//                    repository.setShowCompleted(newValue)
                 }
             }
 
@@ -39,7 +38,10 @@ class HomeViewModel @Inject constructor(
 
     init {
         withViewModelScope {
-            repository.getTodos().collect {
+            repository.getTodos()
+        }
+        withViewModelScope {
+            repository.observeTodos().collect {
                 if (it is ResultState.Success) {
                     viewState = viewState.copy(todos = it.data)
                 } else {
@@ -47,7 +49,7 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
-        withViewModelScope {
+        /*withViewModelScope {
             repository.getDoneTodosAmount().collect {
                 if (it is ResultState.Success) {
                     viewState = viewState.copy(completedCount = it.data)
@@ -55,12 +57,12 @@ class HomeViewModel @Inject constructor(
                     viewAction = HomeAction.ShowSnackbar("Some error while loading amount")
                 }
             }
-        }
-        withViewModelScope {
+        }*/
+        /*withViewModelScope {
             repository.getShowCompleted().collect {
                 viewState = viewState.copy(isShowCompletedEnabled = it)
             }
-        }
+        }*/
     }
 
     private fun deleteTodoAt(todoId: String) {
@@ -71,10 +73,11 @@ class HomeViewModel @Inject constructor(
 
     private fun markTodoAsDoneAt(id: String) {
         withViewModelScope {
-            val response = repository.markTodoAsValue(id)
+            // TODO
+            /*val response = repository.markTodoAsValue(id)
             if (response is ResultState.Error) {
                 viewAction = HomeAction.ShowSnackbar("Нету этой записи")
-            }
+            }*/
         }
     }
 }

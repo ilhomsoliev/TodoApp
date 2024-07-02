@@ -1,5 +1,6 @@
 package com.ilhomsoliev.todo.data.models
 
+/*
 data class TodoItemModel(
     val id: String,
     val text: String,
@@ -28,7 +29,16 @@ data class TodoItemModel(
     }
 
 }
+*/
 
-enum class TodoPriority(val nameRu: String) {
-    LOW("Низкий"), USUAL("Нет"), HIGH("!! Высокий");
+enum class TodoPriority(val nameRu: String, val nameServer: String) {
+    LOW("Низкий", "low"), USUAL("Нет", "basic"), HIGH("!! Высокий", "important");
 }
+
+fun getTodoPriorityFromString(value: String) =
+    when (value) {
+        "low" -> TodoPriority.LOW
+        "basic" -> TodoPriority.USUAL
+        "important" -> TodoPriority.HIGH
+        else -> TodoPriority.LOW
+    }

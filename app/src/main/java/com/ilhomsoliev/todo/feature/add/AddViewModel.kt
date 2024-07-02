@@ -3,8 +3,9 @@ package com.ilhomsoliev.todo.feature.add
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
 import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.core.generateRandomString
-import com.ilhomsoliev.todo.data.models.TodoItemModel
 import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
+import com.ilhomsoliev.todo.domain.models.TodoModel
+import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
@@ -16,22 +17,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddViewModel @Inject constructor(
-    private val repository: TodoItemsRepository
+    private val repository: TodoRepository
 ) : BaseSharedViewModel<AddViewState, AddAction, AddEvent>(AddViewState()) {
 
     override fun obtainEvent(viewEvent: AddEvent) {
         when (viewEvent) {
             is AddEvent.Add -> {
                 withViewModelScope {
-                    val response = repository.insertTodo(
-                        TodoItemModel(
+                    val response = repository.addTodo(
+                        TodoModel(
                             id = viewState.id ?: generateRandomString(),
                             text = viewState.text,
                             priority = viewState.priority,
-                            deadline = viewState.deadline,
-                            isCompleted = false,
-                            createdDate = System.currentTimeMillis(),
-                            editedDate = null,
+                            deadline = viewState.deadline ?: System.currentTimeMillis(), // TODO
+                            done = false,
+                            createdAt = System.currentTimeMillis(),
+                            changedAt = 0,
+                            color = "",
+                            lastUpdatedBy = ""
                         )
                     )
                     if (response is ResultState.Success) {
