@@ -1,5 +1,5 @@
-import java.util.Properties
 import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -102,6 +102,9 @@ dependencies {
     implementation("androidx.room:room-runtime:$room")
     implementation("androidx.room:room-ktx:$room")
     kapt("androidx.room:room-compiler:$room")
+    // Worker
+    implementation("androidx.work:work-runtime:2.7.1")
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // Lifecycle extensions

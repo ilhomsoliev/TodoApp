@@ -1,5 +1,6 @@
 package com.ilhomsoliev.todo.core
 
+import android.os.Build
 import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -24,4 +25,12 @@ fun Any?.printToLog(tag: String = "DEBUG_LOG") {
 fun formatDate(dateInMillis: Long): String {
     val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale("ru"))
     return dateFormat.format(dateInMillis)
+}
+
+fun getDeviceSerialNumber(): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        Build.getSerial()
+    } else {
+        Build.SERIAL
+    }
 }

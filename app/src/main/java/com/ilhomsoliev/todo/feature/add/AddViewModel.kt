@@ -3,7 +3,6 @@ package com.ilhomsoliev.todo.feature.add
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
 import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.core.generateRandomString
-import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.domain.models.TodoModel
 import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.add.model.AddAction
