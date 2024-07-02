@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,9 +42,8 @@ fun Navigation(
             startDestination = Screens.Home.route
         ) {
             composable(Screens.Home.route) {
-                val viewModel =
-                    remember { HomeViewModel((context.applicationContext as TodoApplication).repository) }
-                HomeScreen(vm = viewModel, goAddTodo = {
+                val viewModel = remember { HomeViewModel((context.applicationContext as TodoApplication).repository) }
+                HomeScreen(vm =  hiltViewModel(), goAddTodo = {
                     navController.navigate(Screens.Add.buildRoute(it))
                 })
             }

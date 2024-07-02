@@ -8,10 +8,14 @@ import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import javax.inject.Inject
 
-class AddViewModel(
+
+@HiltViewModel
+class AddViewModel @Inject constructor(
     private val repository: TodoItemsRepository
 ) : BaseSharedViewModel<AddViewState, AddAction, AddEvent>(AddViewState()) {
 

@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
+//    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
 }
 
 android {
@@ -64,7 +67,7 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class")
     implementation(libs.androidx.constraintlayout.compose)
     // Reflection
-    implementation (libs.kotlin.reflect)
+    implementation(libs.kotlin.reflect)
     // ktor
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.jackson)
@@ -74,10 +77,15 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.auth)
     implementation(libs.ktor.client.core)
+    // hilt
+    implementation("com.google.dagger:hilt-android:2.49")
+    kapt("com.google.dagger:hilt-compiler:2.49")
+//    ksp("com.google.dagger:hilt-compiler:2.49")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // Lifecycle extensions
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation (libs.androidx.cardview)
+    implementation(libs.androidx.cardview)
     debugImplementation(libs.androidx.ui.tooling)
 }

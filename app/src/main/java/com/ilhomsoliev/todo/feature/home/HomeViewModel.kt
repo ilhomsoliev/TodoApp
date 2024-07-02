@@ -6,8 +6,11 @@ import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
 import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val repository: TodoItemsRepository
 ) : BaseSharedViewModel<HomeViewState, HomeAction, HomeEvent>(HomeViewState()) {
 

@@ -5,6 +5,9 @@ coilCompose = "2.6.0"
 composeBom = "2024.06.00"
 constraintlayoutCompose = "1.0.1"
 fragmentKtx = "1.8.0"
+koinAndroid = "3.2.2"
+koinAndroidxCompose = "3.2.1"
+koinCore = "3.2.1"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -48,6 +51,9 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
+koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koinCore" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlinReflect" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorClientAuth" }

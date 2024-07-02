@@ -13,10 +13,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.app.navigation.Navigation
-import com.ilhomsoliev.todo.shared.theme.TodoTheme
 import com.ilhomsoliev.todo.shared.snackbar.ProvideSnackbarController
+import com.ilhomsoliev.todo.shared.theme.TodoTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
