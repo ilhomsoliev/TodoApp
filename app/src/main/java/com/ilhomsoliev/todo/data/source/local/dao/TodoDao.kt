@@ -5,14 +5,24 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.ilhomsoliev.todo.data.source.local.dto.TodoEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TodoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsertAll(beers: List<TodoEntity>)
+    suspend fun upsertAll(todos: List<TodoEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(todo: TodoEntity)
+
+    @Query("DELETE FROM todo_table WHERE :todoId = id")
+    suspend fun deleteById(todoId: String)
 
     @Query("SELECT * FROM todo_table")
-    fun getTodos(): List<TodoEntity>
+    fun getTodos(): Flow<List<TodoEntity>>
+
+    @Query("SELECT * FROM todo_table WHERE :todoId = id")
+    fun getTodoById(todoId: String): TodoEntity?
 
     @Query("DELETE FROM todo_table")
     suspend fun clearAll(): Int

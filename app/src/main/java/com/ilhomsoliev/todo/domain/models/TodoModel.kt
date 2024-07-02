@@ -1,5 +1,6 @@
 package com.ilhomsoliev.todo.domain.models
 
+import com.ilhomsoliev.todo.data.source.local.dto.TodoEntity
 import com.ilhomsoliev.todo.data.source.remote.models.request.TodoRequest
 import com.ilhomsoliev.todo.data.source.remote.models.response.list.TodoResponse
 
@@ -25,7 +26,31 @@ data class TodoModel(
         last_updated_by = lastUpdatedBy,
         text = text,
     )
+
+    fun mapToEntity() = TodoEntity(
+        changedAt = changedAt,
+        color = color,
+        createdAt = createdAt,
+        deadline = deadline,
+        done = done,
+        id = id,
+        importance = importance,
+        lastUpdatedBy = lastUpdatedBy,
+        text = text,
+    )
 }
+
+fun TodoEntity.map() = TodoModel(
+    changedAt = changedAt,
+    color = color,
+    createdAt = createdAt,
+    deadline = deadline,
+    done = done,
+    id = id,
+    importance = importance,
+    lastUpdatedBy = lastUpdatedBy,
+    text = text,
+)
 
 fun TodoResponse.map() = TodoModel(
     changedAt = changed_at,
