@@ -3,6 +3,7 @@ package com.ilhomsoliev.todo.data.source.remote
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
 import com.ilhomsoliev.todo.core.NetworkConstants
+import com.ilhomsoliev.todo.core.NetworkConstants.TOKEN
 import com.ilhomsoliev.todo.data.source.LogAdapter
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -29,6 +30,7 @@ import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.URLProtocol
 import io.ktor.http.content.PartData
 import io.ktor.http.contentType
+import io.ktor.http.headers
 import io.ktor.serialization.jackson.jackson
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -58,6 +60,11 @@ open class KtorSource {
                 level = LogLevel.ALL
                 logger = LogAdapter
             }
+            install(Auth){
+                headers {
+                    bearer { loadTokens { BearerTokens(TOKEN, TOKEN) } }
+                }
+            }
 
             install(HttpRequestRetry) {
                 maxRetries = 2
@@ -72,7 +79,7 @@ open class KtorSource {
             defaultRequest {
                 contentType(Json)
                 headers {
-                    append("Authorization", NetworkConstants.TOKEN)
+                    append("Authorization", NetworkConstants.OAUTH)
                 }
                 host = NetworkConstants.HOST
                 url {
@@ -96,16 +103,15 @@ open class KtorSource {
 
     private fun getClientWithTokens(): HttpClient {
         return baseClient.config {
-            install(Auth) {
-                bearer {
-                    loadTokens { BearerTokens(NetworkConstants.TOKEN, NetworkConstants.TOKEN) }
-                }
-            }
+
         }
     }
 
     private var unExpectClient =
-        client.config { expectSuccess = false }
+        client.config {
+            expectSuccess = false
+
+        }
 
     suspend fun delete(
         url: String,
@@ -154,7 +160,7 @@ open class KtorSource {
     suspend fun tryPatchResult(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {}
-    ): Result<HttpResponse> =  try {
+    ): Result<HttpResponse> = try {
         updateClientToken().run {
             runCatching {
                 unExpectClient.patch(url, block)
@@ -215,7 +221,7 @@ open class KtorSource {
     suspend fun tryPostResult(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {}
-    ): Result<HttpResponse> =  try {
+    ): Result<HttpResponse> = try {
         updateClientToken().run {
             runCatching {
                 unExpectClient.post(url, block)
@@ -236,7 +242,7 @@ open class KtorSource {
     suspend fun tryPutResult(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {}
-    ): Result<HttpResponse> =  try {
+    ): Result<HttpResponse> = try {
         updateClientToken().run {
             runCatching {
                 unExpectClient.put(url, block)
@@ -245,6 +251,7 @@ open class KtorSource {
     } catch (e: Exception) {
         Result.failure(e)
     }
+
     suspend fun tryGet(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {},

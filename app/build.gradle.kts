@@ -32,7 +32,7 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "API_KEY", "\"${getLocalProperty("API_KEY", project)}\"")
-        //buildConfigField("String", "TOKEN", "\"${getLocalProperty("TOKEN", project)}\"")
+        buildConfigField("String", "YAPASSPORT", "\"${getLocalProperty("YAPASSPORT", project)}\"")
     }
 
     buildTypes {
@@ -96,7 +96,6 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-//    ksp("com.google.dagger:hilt-compiler:2.49")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     //Room
     val room = "2.6.1"
@@ -105,8 +104,8 @@ dependencies {
     implementation("androidx.room:room-ktx:$room")
     kapt("androidx.room:room-compiler:$room")
     // Worker
-    implementation("androidx.work:work-runtime:2.7.1")
-    implementation("androidx.work:work-runtime-ktx:2.7.1")
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.work.runtime.ktx)
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // Lifecycle extensions
