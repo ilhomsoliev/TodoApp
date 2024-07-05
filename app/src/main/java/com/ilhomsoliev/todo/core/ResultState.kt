@@ -1,5 +1,8 @@
 package com.ilhomsoliev.todo.core
 
+import com.ilhomsoliev.todo.data.shared.wrapped
+import io.ktor.client.statement.HttpResponse
+
 sealed class ResultState<out T> {
 
     data class Success<out T>(val data: T) : ResultState<T>()
@@ -26,6 +29,18 @@ inline fun <T, R> ResultState<T>.map(transform: (T) -> R): ResultState<R> {
     }
 }
 
+suspend inline fun <reified T> Result<HttpResponse>.toResultState(): ResultState<T> {
+    return if (this.isSuccess) {
+        val convert = this.getOrNull()?.wrapped<T>()
+        if (convert != null) {
+            ResultState.Success(convert)
+        } else {
+            ResultState.Error("Null error couldn't convert")
+        }
+    } else {
+        ResultState.Error(this.exceptionOrNull()?.toString() ?: "Unknown error")
+    }
+}
 
 sealed class ErrorTypes(val message: String = "") {
 

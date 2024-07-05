@@ -2,7 +2,7 @@ package com.ilhomsoliev.todo.data.source.remote
 
 import com.ilhomsoliev.todo.core.NetworkConstants
 import com.ilhomsoliev.todo.core.ResultState
-import com.ilhomsoliev.todo.data.shared.wrapped
+import com.ilhomsoliev.todo.core.toResultState
 import com.ilhomsoliev.todo.data.source.remote.models.request.AddTodoRequest
 import com.ilhomsoliev.todo.data.source.remote.models.request.EditTodoRequest
 import com.ilhomsoliev.todo.data.source.remote.models.request.TodoRequest
@@ -16,119 +16,46 @@ import io.ktor.client.request.setBody
 class TodoNetworkManager(
     private val webSource: KtorSource
 ) {
-    suspend fun getTodos() = webSource.tryGetResult("${NetworkConstants.PREFIX}/list") {
-        headers {
-            append("Authorization", NetworkConstants.TOKEN)
-        }
-    }.let {
-        if (it.isSuccess) {
-            val convert = it.getOrNull()?.wrapped<TodosResponse>()
-            if (convert != null) {
-                ResultState.Success(convert)
-            } else {
-                ResultState.Error("Null error couldn't convert")
-            }
-        } else {
-            ResultState.Error(it.exceptionOrNull().toString())
-        }
-    }
+    suspend fun getTodos(): ResultState<TodosResponse> =
+        webSource.tryGetResult("${NetworkConstants.PREFIX}/list")
+            .let { return it.toResultState() }
 
-    suspend fun addTodo(revision: Int, todo: TodoRequest) =
+    suspend fun addTodo(revision: Int, todo: TodoRequest): ResultState<EditTodoResponse> =
         webSource.tryPostResult("${NetworkConstants.PREFIX}/list") {
             headers {
-                append("Authorization", NetworkConstants.TOKEN)
                 append("X-Last-Known-Revision", revision.toString())
             }
             setBody(AddTodoRequest(element = todo))
-        }.let {
-            if (it.isSuccess) {
-                val convert = it.getOrNull()?.wrapped<EditTodoResponse>()
-                if (convert != null) {
-                    ResultState.Success(convert)
-                } else {
-                    ResultState.Error("Null error couldn't convert")
-                }
-            } else {
-                ResultState.Error(it.exceptionOrNull().toString())
-            }
         }
+            .let { return it.toResultState() }
 
-    suspend fun editTodo(revision: Int, todo: TodoRequest) =
+    suspend fun editTodo(revision: Int, todo: TodoRequest): ResultState<GetTodoResponse> =
         webSource.tryPutResult("${NetworkConstants.PREFIX}/list/${todo.id}") {
             headers {
-                append("Authorization", NetworkConstants.TOKEN)
                 append("X-Last-Known-Revision", revision.toString())
             }
             setBody(EditTodoRequest(element = todo))
-        }.let {
-            if (it.isSuccess) {
-                val convert = it.getOrNull()?.wrapped<GetTodoResponse>()
-                if (convert != null) {
-                    ResultState.Success(convert)
-                } else {
-                    ResultState.Error("Null error couldn't convert")
-                }
-            } else {
-                ResultState.Error(it.exceptionOrNull().toString())
-            }
-        }
+        }.let { return it.toResultState() }
 
-    suspend fun deleteTodo(revision: Int, todoId: String) =
+    suspend fun deleteTodo(revision: Int, todoId: String): ResultState<DeleteTodoResponse> =
         webSource.tryDeleteResult("${NetworkConstants.PREFIX}/list/$todoId") {
             headers {
-                append("Authorization", NetworkConstants.TOKEN)
                 append("X-Last-Known-Revision", revision.toString())
             }
-        }.let {
-            if (it.isSuccess) {
-                val convert = it.getOrNull()?.wrapped<DeleteTodoResponse>()
-                if (convert != null) {
-                    ResultState.Success(convert)
-                } else {
-                    ResultState.Error("Null error couldn't convert")
-                }
-            } else {
-                ResultState.Error(it.exceptionOrNull().toString())
-            }
-        }
+        }.let { return it.toResultState() }
 
-    suspend fun getTodoById(revision: Int, todoId: String) =
+    suspend fun getTodoById(revision: Int, todoId: String): ResultState<GetTodoResponse> =
         webSource.tryGetResult("${NetworkConstants.PREFIX}/list/$todoId") {
             headers {
-                append("Authorization", NetworkConstants.TOKEN)
                 append("X-Last-Known-Revision", revision.toString())
             }
-        }.let {
-            if (it.isSuccess) {
-                val convert = it.getOrNull()?.wrapped<GetTodoResponse>()
-                if (convert != null) {
-                    ResultState.Success(convert)
-                } else {
-                    ResultState.Error("Null error couldn't convert")
-                }
-            } else {
-                ResultState.Error(it.exceptionOrNull().toString())
-            }
-        }
+        }.let { return it.toResultState() }
 
-    suspend fun updateList(revision: Int, todos: List<TodoRequest>) =
+    suspend fun updateList(revision: Int, todos: List<TodoRequest>): ResultState<TodosResponse> =
         webSource.tryPatchResult("${NetworkConstants.PREFIX}/list") {
             headers {
-                append("Authorization", NetworkConstants.TOKEN)
                 append("X-Last-Known-Revision", revision.toString())
             }
             setBody(todos)
-        }.let {
-            if (it.isSuccess) {
-                val convert = it.getOrNull()?.wrapped<TodosResponse>()
-                if (convert != null) {
-                    ResultState.Success(convert)
-                } else {
-                    ResultState.Error("Null error couldn't convert")
-                }
-            } else {
-                ResultState.Error(it.exceptionOrNull().toString())
-            }
-        }
-
+        }.let { return it.toResultState() }
 }

@@ -133,10 +133,14 @@ open class KtorSource {
     suspend fun tryGetResult(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {}
-    ): Result<HttpResponse> = updateClientToken().run {
-        runCatching {
-            unExpectClient.get(url, block)
+    ): Result<HttpResponse> = try {
+        updateClientToken().run {
+            runCatching {
+                unExpectClient.get(url, block)
+            }
         }
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 
     /**
@@ -150,10 +154,14 @@ open class KtorSource {
     suspend fun tryPatchResult(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {}
-    ): Result<HttpResponse> = updateClientToken().run {
-        runCatching {
-            unExpectClient.patch(url, block)
+    ): Result<HttpResponse> =  try {
+        updateClientToken().run {
+            runCatching {
+                unExpectClient.patch(url, block)
+            }
         }
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 
     /**
@@ -167,10 +175,14 @@ open class KtorSource {
     suspend fun tryDeleteResult(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {}
-    ): Result<HttpResponse> = updateClientToken().run {
-        runCatching {
-            unExpectClient.delete(url, block)
+    ): Result<HttpResponse> = try {
+        updateClientToken().run {
+            runCatching {
+                unExpectClient.delete(url, block)
+            }
         }
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 
     /**
@@ -203,10 +215,14 @@ open class KtorSource {
     suspend fun tryPostResult(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {}
-    ): Result<HttpResponse> = updateClientToken().run {
-        runCatching {
-            unExpectClient.post(url, block)
+    ): Result<HttpResponse> =  try {
+        updateClientToken().run {
+            runCatching {
+                unExpectClient.post(url, block)
+            }
         }
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 
     /**
@@ -220,12 +236,15 @@ open class KtorSource {
     suspend fun tryPutResult(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {}
-    ): Result<HttpResponse> = updateClientToken().run {
-        runCatching {
-            unExpectClient.put(url, block)
+    ): Result<HttpResponse> =  try {
+        updateClientToken().run {
+            runCatching {
+                unExpectClient.put(url, block)
+            }
         }
+    } catch (e: Exception) {
+        Result.failure(e)
     }
-
     suspend fun tryGet(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {},
