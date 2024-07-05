@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         window.statusBarColor = ContextCompat.getColor(this, R.color.backPrimary)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.backPrimary)
         setContent {

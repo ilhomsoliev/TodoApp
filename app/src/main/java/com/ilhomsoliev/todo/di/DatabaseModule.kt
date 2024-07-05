@@ -3,7 +3,7 @@ package com.ilhomsoliev.todo.di
 import android.content.Context
 import androidx.room.Room
 import com.ilhomsoliev.todo.data.source.local.TodoDatabase
-import com.ilhomsoliev.todo.data.source.local.dao.TodoDao
+import com.ilhomsoliev.todo.data.source.local.dao.TodoLocalDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +26,8 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideTodoDao(database: TodoDatabase): TodoDao {
-        return database.todoDao
+    fun provideTodoDao(database: TodoDatabase): TodoLocalDao {
+        return database.todoLocalDao
     }
 
 

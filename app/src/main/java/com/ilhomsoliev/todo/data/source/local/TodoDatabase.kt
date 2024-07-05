@@ -2,7 +2,7 @@ package com.ilhomsoliev.todo.data.source.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.ilhomsoliev.todo.data.source.local.dao.TodoDao
+import com.ilhomsoliev.todo.data.source.local.dao.TodoLocalDao
 import com.ilhomsoliev.todo.data.source.local.dto.TodoEntity
 
 @Database(
@@ -11,5 +11,5 @@ import com.ilhomsoliev.todo.data.source.local.dto.TodoEntity
     exportSchema = false
 )
 abstract class TodoDatabase : RoomDatabase() {
-    abstract val todoDao: TodoDao
+    abstract val todoLocalDao: TodoLocalDao
 }

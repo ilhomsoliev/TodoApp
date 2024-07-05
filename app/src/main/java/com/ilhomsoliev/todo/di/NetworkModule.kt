@@ -1,7 +1,7 @@
 package com.ilhomsoliev.todo.di
 
 import com.ilhomsoliev.todo.data.source.remote.KtorSource
-import com.ilhomsoliev.todo.data.source.remote.TodoManager
+import com.ilhomsoliev.todo.data.source.remote.TodoNetworkManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,8 +19,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTodoManager(): TodoManager {
-        return TodoManager(provideKtorSource())
+    fun provideTodoManager(): TodoNetworkManager {
+        return TodoNetworkManager(provideKtorSource())
     }
 
 }

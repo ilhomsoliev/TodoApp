@@ -13,7 +13,7 @@ import com.ilhomsoliev.todo.data.source.remote.models.response.list.TodosRespons
 import io.ktor.client.request.headers
 import io.ktor.client.request.setBody
 
-class TodoManager(
+class TodoNetworkManager(
     private val webSource: KtorSource
 ) {
     suspend fun getTodos() = webSource.tryGetResult("${NetworkConstants.PREFIX}/list") {

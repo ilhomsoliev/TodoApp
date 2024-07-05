@@ -8,7 +8,7 @@ import com.ilhomsoliev.todo.data.source.local.dto.TodoEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface TodoDao {
+interface TodoLocalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(todos: List<TodoEntity>)
 
