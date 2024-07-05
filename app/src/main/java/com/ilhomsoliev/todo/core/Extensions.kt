@@ -1,9 +1,9 @@
 package com.ilhomsoliev.todo.core
 
-import android.os.Build
 import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.UUID
 
 
 private const val IS_DEBUG: Boolean = true // BuildConfig.DEBUG
@@ -27,10 +27,4 @@ fun formatDate(dateInMillis: Long): String {
     return dateFormat.format(dateInMillis)
 }
 
-fun getDeviceSerialNumber(): String {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        Build.getSerial()
-    } else {
-        Build.SERIAL
-    }
-}
+fun getDeviceSerialNumber(): String = UUID.randomUUID().toString()

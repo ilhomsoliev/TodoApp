@@ -69,10 +69,14 @@ fun HomeDisplay(
             HomeTopBar(
                 elevation = elevation,
                 completedItemsCount = state.completedCount,
-                showCompleted = state.isShowCompletedEnabled
-            ) {
-                callback(HomeEvent.ToggleIsCompletedVisible)
-            }
+                showCompleted = state.isShowCompletedEnabled,
+                onEyeIconClick = {
+                    callback(HomeEvent.ToggleIsCompletedVisible)
+                },
+                onRefreshIconClick = {
+                    callback(HomeEvent.Refresh)
+                }
+            )
         },
         floatingActionButton = {
             FloatingActionButton(containerColor = AppTheme.colorScheme.blue, onClick = {

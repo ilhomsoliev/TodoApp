@@ -2,6 +2,7 @@ package com.ilhomsoliev.todo.feature.home.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ilhomsoliev.todo.R
+import com.ilhomsoliev.todo.data.source.local.local_based.DataStoreManager
 import com.ilhomsoliev.todo.shared.theme.AppTheme
 import com.ilhomsoliev.todo.shared.theme.TodoTheme
 
@@ -45,7 +47,8 @@ fun HomeTopBar(
     completedItemsCount: Int,
     showCompleted: Boolean,
     elevation: Dp,
-    onEyeIconClick: () -> Unit
+    onEyeIconClick: () -> Unit,
+    onRefreshIconClick: () -> Unit = {}
 ) {
     Surface(
         contentColor = AppTheme.colorScheme.backPrimary,
@@ -62,7 +65,6 @@ fun HomeTopBar(
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         style = AppTheme.typography.title.copy(AppTheme.colorScheme.labelPrimary),
-//                        color = AppTheme.colorScheme.labelPrimary
                     )
                     Text(
                         text = stringResource(
@@ -75,6 +77,17 @@ fun HomeTopBar(
                 }
 
             }, actions = {
+                if (DataStoreManager.hasError.value)
+                    IconButton(
+                        onClick = onRefreshIconClick
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            tint = AppTheme.colorScheme.blue,
+                            contentDescription = null
+                        )
+                    }
+
                 IconButton(
                     onClick = onEyeIconClick
                 ) {
@@ -86,6 +99,7 @@ fun HomeTopBar(
                         tint = AppTheme.colorScheme.blue
                     )
                 }
+
             })
     }
 }

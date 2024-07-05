@@ -1,6 +1,7 @@
 package com.ilhomsoliev.todo.core
 
 import com.ilhomsoliev.todo.data.shared.wrapped
+import com.ilhomsoliev.todo.data.source.local.local_based.DataStoreManager
 import io.ktor.client.statement.HttpResponse
 
 sealed class ResultState<out T> {
@@ -15,7 +16,7 @@ sealed class ResultState<out T> {
 }
 
 suspend fun <T> ResultState<T>.on(
-    success: suspend (T) -> Unit,
+    success: suspend (T) -> Unit = {},
     error: suspend (ResultState.Error) -> Unit = {}
 ): ResultState<T> {
     when (this) {
@@ -38,10 +39,15 @@ suspend inline fun <reified T> Result<HttpResponse>.toResultState(): ResultState
         if (convert != null) {
             ResultState.Success(convert)
         } else {
-            ResultState.Error("Null error couldn't convert")
+            DataStoreManager.hasError.value = true
+            ResultState.Error("Null error couldn't convert", types = listOf(ErrorTypes.Network))
         }
     } else {
-        ResultState.Error(this.exceptionOrNull()?.toString() ?: "Unknown error")
+        DataStoreManager.hasError.value = true
+        ResultState.Error(
+            this.exceptionOrNull()?.toString() ?: "Unknown error",
+            types = listOf(ErrorTypes.Network)
+        )
     }
 }
 
@@ -55,6 +61,8 @@ sealed class ErrorTypes(val message: String = "") {
         data object Name : Validation()
         data object Lastname : Validation()
     }
+
+    data object Network : ErrorTypes("Network problem")
 
 
 }

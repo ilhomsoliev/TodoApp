@@ -1,9 +1,11 @@
 package com.ilhomsoliev.todo.feature.add
 
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
+import com.ilhomsoliev.todo.core.ErrorTypes
 import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.core.generateRandomString
 import com.ilhomsoliev.todo.core.getDeviceSerialNumber
+import com.ilhomsoliev.todo.core.on
 import com.ilhomsoliev.todo.domain.models.TodoModel
 import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.add.model.AddAction
@@ -39,8 +41,10 @@ class AddViewModel @Inject constructor(
                     )
                     if (response is ResultState.Success) {
                         viewAction = AddAction.NavigateBack
-                    } else {
-                        showSnackbarMessage("Заполните поля")
+                    } else if (response is ResultState.Error) {
+                        showSnackbarMessage("Что то пошло не так!")
+                        if (response.types.contains(ErrorTypes.Network))
+                            viewAction = AddAction.NavigateBack
                     }
                 }
             }
@@ -83,7 +87,9 @@ class AddViewModel @Inject constructor(
             AddEvent.Delete -> {
                 withViewModelScope {
                     viewState.id?.let {
-                        repository.deleteTodo(it)
+                        repository.deleteTodo(it).on {
+                            showSnackbarMessage("Что то пошло не так!")
+                        }
                     }
                     viewAction = AddAction.NavigateBack
                 }

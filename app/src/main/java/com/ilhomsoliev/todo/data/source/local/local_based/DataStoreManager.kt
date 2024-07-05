@@ -1,5 +1,6 @@
 package com.ilhomsoliev.todo.data.source.local.local_based
 
+import androidx.compose.runtime.mutableStateOf
 import javax.inject.Inject
 
 class DataStoreManager @Inject constructor() {
@@ -9,4 +10,8 @@ class DataStoreManager @Inject constructor() {
     }
 
     fun getRevision(): Int = revision
+
+    companion object {
+        val hasError = mutableStateOf(false)
+    }
 }

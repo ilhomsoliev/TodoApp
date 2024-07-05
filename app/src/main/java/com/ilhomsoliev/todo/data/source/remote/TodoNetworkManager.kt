@@ -6,6 +6,7 @@ import com.ilhomsoliev.todo.core.toResultState
 import com.ilhomsoliev.todo.data.source.remote.models.request.AddTodoRequest
 import com.ilhomsoliev.todo.data.source.remote.models.request.EditTodoRequest
 import com.ilhomsoliev.todo.data.source.remote.models.request.TodoRequest
+import com.ilhomsoliev.todo.data.source.remote.models.request.map
 import com.ilhomsoliev.todo.data.source.remote.models.response.delete.DeleteTodoResponse
 import com.ilhomsoliev.todo.data.source.remote.models.response.edit.EditTodoResponse
 import com.ilhomsoliev.todo.data.source.remote.models.response.getById.GetTodoResponse
@@ -56,6 +57,6 @@ class TodoNetworkManager(
             headers {
                 append(NetworkConstants.REVISION_HEADER, revision.toString())
             }
-            setBody(todos)
+            setBody(TodosResponse(status = "ok", list = todos.map { it.map() }, revision = 0))
         }.let { return it.toResultState() }
 }

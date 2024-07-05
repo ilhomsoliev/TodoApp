@@ -2,6 +2,7 @@ package com.ilhomsoliev.todo.feature.home
 
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
 import com.ilhomsoliev.todo.core.ResultState
+import com.ilhomsoliev.todo.core.on
 import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
@@ -32,13 +33,23 @@ class HomeViewModel @Inject constructor(
                 }
             }
 
+            is HomeEvent.Refresh -> {
+                withViewModelScope {
+                    repository.updateList().on {
+                        viewAction = HomeAction.ShowSnackbar("Could no update list from server")
+                    }
+                }
+            }
+
             else -> {}
         }
     }
 
     init {
         withViewModelScope {
-            repository.getTodos()
+            repository.getTodos().on {
+                viewAction = HomeAction.ShowSnackbar("Could no update list from server")
+            }
         }
         withViewModelScope {
             repository.observeTodos().collect {
@@ -63,7 +74,9 @@ class HomeViewModel @Inject constructor(
 
     private fun deleteTodoAt(todoId: String) {
         withViewModelScope {
-            repository.deleteTodo(todoId)
+            repository.deleteTodo(todoId).on {
+                showSnackbarMessage("Что то пошло не так!")
+            }
         }
     }
 
