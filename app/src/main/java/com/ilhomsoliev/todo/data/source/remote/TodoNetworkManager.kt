@@ -23,7 +23,7 @@ class TodoNetworkManager(
     suspend fun addTodo(revision: Int, todo: TodoRequest): ResultState<EditTodoResponse> =
         webSource.tryPostResult("${NetworkConstants.PREFIX}/list") {
             headers {
-                append("X-Last-Known-Revision", revision.toString())
+                append(NetworkConstants.REVISION_HEADER, revision.toString())
             }
             setBody(AddTodoRequest(element = todo))
         }
@@ -32,7 +32,7 @@ class TodoNetworkManager(
     suspend fun editTodo(revision: Int, todo: TodoRequest): ResultState<GetTodoResponse> =
         webSource.tryPutResult("${NetworkConstants.PREFIX}/list/${todo.id}") {
             headers {
-                append("X-Last-Known-Revision", revision.toString())
+                append(NetworkConstants.REVISION_HEADER, revision.toString())
             }
             setBody(EditTodoRequest(element = todo))
         }.let { return it.toResultState() }
@@ -40,21 +40,21 @@ class TodoNetworkManager(
     suspend fun deleteTodo(revision: Int, todoId: String): ResultState<DeleteTodoResponse> =
         webSource.tryDeleteResult("${NetworkConstants.PREFIX}/list/$todoId") {
             headers {
-                append("X-Last-Known-Revision", revision.toString())
+                append(NetworkConstants.REVISION_HEADER, revision.toString())
             }
         }.let { return it.toResultState() }
 
     suspend fun getTodoById(revision: Int, todoId: String): ResultState<GetTodoResponse> =
         webSource.tryGetResult("${NetworkConstants.PREFIX}/list/$todoId") {
             headers {
-                append("X-Last-Known-Revision", revision.toString())
+                append(NetworkConstants.REVISION_HEADER, revision.toString())
             }
         }.let { return it.toResultState() }
 
     suspend fun updateList(revision: Int, todos: List<TodoRequest>): ResultState<TodosResponse> =
         webSource.tryPatchResult("${NetworkConstants.PREFIX}/list") {
             headers {
-                append("X-Last-Known-Revision", revision.toString())
+                append(NetworkConstants.REVISION_HEADER, revision.toString())
             }
             setBody(todos)
         }.let { return it.toResultState() }

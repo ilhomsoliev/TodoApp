@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
                 withViewModelScope {
                     val newValue = !viewState.isShowCompletedEnabled
                     viewState = viewState.copy(isShowCompletedEnabled = newValue)
-//                    repository.setShowCompleted(newValue)
+                    repository.setShowCompleted(newValue)
                 }
             }
 
@@ -49,20 +49,16 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
-        /*withViewModelScope {
+        withViewModelScope {
             repository.getDoneTodosAmount().collect {
-                if (it is ResultState.Success) {
-                    viewState = viewState.copy(completedCount = it.data)
-                } else {
-                    viewAction = HomeAction.ShowSnackbar("Some error while loading amount")
-                }
+                viewState = viewState.copy(completedCount = it)
             }
-        }*/
-        /*withViewModelScope {
+        }
+        withViewModelScope {
             repository.getShowCompleted().collect {
                 viewState = viewState.copy(isShowCompletedEnabled = it)
             }
-        }*/
+        }
     }
 
     private fun deleteTodoAt(todoId: String) {
@@ -73,11 +69,10 @@ class HomeViewModel @Inject constructor(
 
     private fun markTodoAsDoneAt(id: String) {
         withViewModelScope {
-            // TODO
-            /*val response = repository.markTodoAsValue(id)
+            val response = repository.markTodoAsValue(id)
             if (response is ResultState.Error) {
                 viewAction = HomeAction.ShowSnackbar("Нету этой записи")
-            }*/
+            }
         }
     }
 }

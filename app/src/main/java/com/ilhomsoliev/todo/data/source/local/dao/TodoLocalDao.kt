@@ -18,7 +18,7 @@ interface TodoLocalDao {
     @Query("DELETE FROM todo_table WHERE :todoId = id")
     suspend fun deleteById(todoId: String)
 
-    @Query("SELECT * FROM todo_table")
+    @Query("SELECT * FROM todo_table ORDER BY createdAt ASC")
     fun getTodos(): Flow<List<TodoEntity>>
 
     @Query("SELECT * FROM todo_table WHERE :todoId = id")

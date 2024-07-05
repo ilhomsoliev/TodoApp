@@ -3,6 +3,7 @@ package com.ilhomsoliev.todo.feature.add
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
 import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.core.generateRandomString
+import com.ilhomsoliev.todo.core.getDeviceSerialNumber
 import com.ilhomsoliev.todo.domain.models.TodoModel
 import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.add.model.AddAction
@@ -33,7 +34,7 @@ class AddViewModel @Inject constructor(
                             createdAt = System.currentTimeMillis(),
                             changedAt = 0,
                             color = "",
-                            lastUpdatedBy = ""
+                            lastUpdatedBy = getDeviceSerialNumber()
                         )
                     )
                     if (response is ResultState.Success) {
@@ -67,12 +68,11 @@ class AddViewModel @Inject constructor(
                                         text = todo.data.text,
                                         priority = todo.data.priority,
                                         deadline = todo.data.deadline,
-                                        date = todo.data.deadline?.let { it1 ->
+                                        date = todo.data.deadline.let { it1 ->
                                             getDateForDeadline(
                                                 it1
                                             )
-                                        }
-                                            ?: "",
+                                        },
                                     )
                                 }
                             }

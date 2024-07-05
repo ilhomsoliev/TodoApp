@@ -2,6 +2,7 @@ package com.ilhomsoliev.todo.domain.repository
 
 import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.core.map
+import com.ilhomsoliev.todo.core.on
 import com.ilhomsoliev.todo.data.source.local.dao.TodoLocalDao
 import com.ilhomsoliev.todo.data.source.local.local_based.DataStoreManager
 import com.ilhomsoliev.todo.data.source.remote.TodoNetworkManager
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TodoRepositoryImpl @Inject constructor(
@@ -38,6 +40,11 @@ class TodoRepositoryImpl @Inject constructor(
             todos
         }
     }
+
+    override fun getDoneTodosAmount(): Flow<Int> = todoLocalDao.getTodos().map {
+         it.count { item -> item.done }
+    }
+
 
     override fun observeTodos(): Flow<ResultState<List<TodoModel>>> {
         return combine(todoLocalDao.getTodos(), _showCompleted) { todos, showCompleted ->
@@ -98,5 +105,12 @@ class TodoRepositoryImpl @Inject constructor(
             todoLocalDao.upsertAll(todosResponse.map { it.mapToEntity() })
             todosResponse
         }
+    }
+
+    override suspend fun markTodoAsValue(todoId: String): ResultState<TodoModel> {
+        val todo = getTodoById(todoId)
+        return todo.on(success = {
+            editTodo(it.copy(done = !it.done))
+        })
     }
 }

@@ -14,10 +14,13 @@ sealed class ResultState<out T> {
     }
 }
 
-fun <T> ResultState<T>.on(success: (T) -> Unit, error: (ResultState.Error) -> Unit): ResultState<T> {
+suspend fun <T> ResultState<T>.on(
+    success: suspend (T) -> Unit,
+    error: suspend (ResultState.Error) -> Unit = {}
+): ResultState<T> {
     when (this) {
         is ResultState.Success -> success(this.data)
-        is ResultState.Error -> error(this )
+        is ResultState.Error -> error(this)
     }
     return this
 }
