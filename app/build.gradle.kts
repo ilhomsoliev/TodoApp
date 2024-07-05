@@ -31,7 +31,8 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "TOKEN", "\"${getLocalProperty("TOKEN", project)}\"")
+        buildConfigField("String", "API_KEY", "\"${getLocalProperty("API_KEY", project)}\"")
+        //buildConfigField("String", "TOKEN", "\"${getLocalProperty("TOKEN", project)}\"")
     }
 
     buildTypes {
@@ -56,6 +57,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

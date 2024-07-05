@@ -9,7 +9,6 @@ import com.ilhomsoliev.todo.data.source.remote.models.request.TodoRequest
 import com.ilhomsoliev.todo.data.source.remote.models.response.delete.DeleteTodoResponse
 import com.ilhomsoliev.todo.data.source.remote.models.response.edit.EditTodoResponse
 import com.ilhomsoliev.todo.data.source.remote.models.response.getById.GetTodoResponse
-import com.ilhomsoliev.todo.data.source.remote.models.response.list.TodoResponse
 import com.ilhomsoliev.todo.data.source.remote.models.response.list.TodosResponse
 import io.ktor.client.request.headers
 import io.ktor.client.request.setBody
@@ -43,7 +42,6 @@ class TodoManager(
             setBody(AddTodoRequest(element = todo))
         }.let {
             if (it.isSuccess) {
-
                 val convert = it.getOrNull()?.wrapped<EditTodoResponse>()
                 if (convert != null) {
                     ResultState.Success(convert)
@@ -93,6 +91,7 @@ class TodoManager(
                 ResultState.Error(it.exceptionOrNull().toString())
             }
         }
+
     suspend fun getTodoById(revision: Int, todoId: String) =
         webSource.tryGetResult("${NetworkConstants.PREFIX}/list/$todoId") {
             headers {

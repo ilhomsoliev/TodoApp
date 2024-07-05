@@ -59,18 +59,23 @@ class AddViewModel @Inject constructor(
             is AddEvent.EnterScreen -> {
                 withViewModelScope {
                     viewEvent.id?.let {
-                        repository.getTodoById(it).let { todo ->
-                            if (todo is ResultState.Success) {
-                                viewState = viewState.copy(
-                                    id = todo.data.id,
-                                    text = todo.data.text,
-                                    priority = todo.data.priority,
-                                    deadline = todo.data.deadline,
-                                    date = todo.data.deadline?.let { it1 -> getDateForDeadline(it1) }
-                                        ?: "",
-                                )
+                        if (it != "null")
+                            repository.getTodoById(it).let { todo ->
+                                if (todo is ResultState.Success) {
+                                    viewState = viewState.copy(
+                                        id = todo.data.id,
+                                        text = todo.data.text,
+                                        priority = todo.data.priority,
+                                        deadline = todo.data.deadline,
+                                        date = todo.data.deadline?.let { it1 ->
+                                            getDateForDeadline(
+                                                it1
+                                            )
+                                        }
+                                            ?: "",
+                                    )
+                                }
                             }
-                        }
                     }
                 }
             }

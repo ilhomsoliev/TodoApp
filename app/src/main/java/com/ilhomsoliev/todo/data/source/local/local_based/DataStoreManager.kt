@@ -1,6 +1,8 @@
 package com.ilhomsoliev.todo.data.source.local.local_based
 
-class DataStoreManager {
+import javax.inject.Inject
+
+class DataStoreManager @Inject constructor() {
     private var revision = 0
     fun changeRevision(value: Int) {
         revision = value

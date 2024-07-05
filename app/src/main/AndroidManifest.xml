@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".app.TodoApplication"
         android:allowBackup="true"

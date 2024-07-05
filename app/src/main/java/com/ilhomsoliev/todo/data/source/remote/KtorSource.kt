@@ -2,6 +2,7 @@ package com.ilhomsoliev.todo.data.source.remote
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL
 import com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES
+import com.ilhomsoliev.todo.core.NetworkConstants
 import com.ilhomsoliev.todo.data.source.LogAdapter
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -15,12 +16,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.websocket.DefaultClientWebSocketSession
-import io.ktor.client.plugins.websocket.WebSockets
-import io.ktor.client.plugins.websocket.webSocketSession
-import io.ktor.client.plugins.websocket.wss
 import io.ktor.client.request.HttpRequestBuilder
-import io.ktor.client.request.HttpSendPipeline
 import io.ktor.client.request.delete
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
@@ -33,7 +29,6 @@ import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.URLProtocol
 import io.ktor.http.content.PartData
 import io.ktor.http.contentType
-import io.ktor.serialization.jackson.JacksonWebsocketContentConverter
 import io.ktor.serialization.jackson.jackson
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -45,12 +40,9 @@ open class KtorSource {
 
     private val baseClient by lazy {
         HttpClient(OkHttp) {
-
-            expectSuccess = true
-
+            expectSuccess = false
             engine {
                 config {
-                    //addInterceptor(chuckerInterceptor)
                     writeTimeout(60, SECONDS)
                 }
                 preconfigured = OkHttpClient.Builder()
@@ -63,7 +55,7 @@ open class KtorSource {
             }
 
             install(Logging) {
-                level = LogLevel.BODY
+                level = LogLevel.ALL
                 logger = LogAdapter
             }
 
@@ -74,21 +66,17 @@ open class KtorSource {
             install(ContentNegotiation) {
                 jackson {
                     configure(FAIL_ON_UNKNOWN_PROPERTIES, false)
-//                    propertyNamingStrategy = SnakeCaseStrategy()
                     setSerializationInclusion(NON_NULL)
                 }
             }
             defaultRequest {
                 contentType(Json)
                 headers {
-                    append(
-                        name = "Accept-Language",
-                        value = "ru" //getDefault().language
-                    )
+                    append("Authorization", NetworkConstants.TOKEN)
                 }
-                host = "" // TODO NetworkConstants.HOST
+                host = NetworkConstants.HOST
                 url {
-                    protocol = URLProtocol.HTTP
+                    protocol = URLProtocol.HTTPS
                 }
             }
             install(HttpTimeout) {
@@ -96,24 +84,6 @@ open class KtorSource {
                 socketTimeoutMillis = INFINITE_TIMEOUT_MS
                 requestTimeoutMillis = 60_000L
             }
-//            install(UserAgent) { agent = env[ENV_USER_AGENT] ?: "" } TODO
-            install(WebSockets) {
-                contentConverter = JacksonWebsocketContentConverter()
-                pingInterval = webSocketPingInterval
-            }
-        }/*.apply {
-            plugin(HttpSend).intercept { request ->
-                // Log.d("Hello Bear", "${env.get<Any>(ENV_BASE_URL)}.toString()")
-                request.url.host = env[ENV_BASE_URL] ?: ""
-                //request.url.protocol = URLProtocol.HTTPS
-                execute(request)
-            }
-        }*/
-    }
-
-    val unauthorizedClient by lazy {
-        baseClient.config {
-            expectSuccess = false
         }
     }
 
@@ -124,50 +94,12 @@ open class KtorSource {
         unExpectClient = client.config { expectSuccess = false }
     }
 
-    suspend fun wsSession(
-        host: String, port: Int, path: String,
-    ) = unauthorizedClient.webSocketSession(
-        host = host,
-        port = port,
-        path = path,
-    )
-
-    suspend fun wssSession(
-        host: String,
-        path: String,
-        block: suspend DefaultClientWebSocketSession.() -> Unit,
-    ) = unauthorizedClient.wss(
-        host = host,
-        path = path,
-        block = block,
-    )
-
-    fun closeClient() {
-        unauthorizedClient.close()
-        client.close()
-        unExpectClient.close()
-    }
-
     private fun getClientWithTokens(): HttpClient {
-        baseClient.sendPipeline.intercept(HttpSendPipeline.State) {
-            context.url({}) // TODO
-        }
         return baseClient.config {
             install(Auth) {
                 bearer {
-                    loadTokens { BearerTokens("", "") } // TODO
-                    refreshTokens { BearerTokens("", "") }
+                    loadTokens { BearerTokens(NetworkConstants.TOKEN, NetworkConstants.TOKEN) }
                 }
-            }
-            defaultRequest {
-                contentType(Json)
-                headers {
-                    append(
-                        name = "Accept-Language",
-                        value = "ru" // getDefault().language
-                    )
-                }
-                host = "" // env[ENV_BASE_URL] ?: ""
             }
         }
     }
@@ -189,19 +121,6 @@ open class KtorSource {
         client.post(url, block)
     }
 
-    suspend fun unauthorizedGetResult(
-        url: String,
-        block: HttpRequestBuilder.() -> Unit = {},
-    ) = runCatching {
-        unauthorizedClient.get(url, block)
-    }
-
-    suspend fun unauthorizedPostResult(
-        url: String,
-        block: HttpRequestBuilder.() -> Unit = {},
-    ) = runCatching {
-        unauthorizedClient.post(url, block)
-    }
 
     /**
      * Выполняет HTTP GET запрос к указанному URL с возможностью выполнения дополнительных настроек с использованием блока [block].
@@ -307,25 +226,6 @@ open class KtorSource {
         }
     }
 
-    @Deprecated(
-        "Use unauthorizedGetResult instead",
-        ReplaceWith("unauthorizedGetResult(url, block)")
-    )
-    suspend fun unauthorizedGet(
-        url: String,
-        block: HttpRequestBuilder.() -> Unit = {},
-    ) = unauthorizedClient.get(url, block)
-
-    @Deprecated(
-        "Use unauthorizedPostResult instead",
-        ReplaceWith("unauthorizedPostResult(url, block)")
-    )
-    suspend fun unauthorizedPost(
-        url: String,
-        block: HttpRequestBuilder.() -> Unit = {},
-    ) = unauthorizedClient.post(url, block)
-
-    @Deprecated("Use tryGerResult instead", ReplaceWith("tryGetResult(url, block)"))
     suspend fun tryGet(
         url: String,
         block: HttpRequestBuilder.() -> Unit = {},

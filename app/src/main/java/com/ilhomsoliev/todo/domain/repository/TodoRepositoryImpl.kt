@@ -12,8 +12,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class TodoRepositoryImpl(
+class TodoRepositoryImpl @Inject constructor(
     private val dataStoreManager: DataStoreManager,
     private val todoManager: TodoManager,
     private val todoDao: TodoDao,
@@ -47,9 +48,6 @@ class TodoRepositoryImpl(
                 ResultState.Success(newTodos)
             }
         }
-//        return todoDao.getTodos().map {
-//            ResultState.Success(it.map { it.map() })
-//        }
     }
 
     override suspend fun addTodo(request: TodoModel): ResultState<TodoModel> {
