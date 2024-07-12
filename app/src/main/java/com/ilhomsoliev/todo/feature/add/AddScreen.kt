@@ -18,6 +18,7 @@ fun AddScreen(vm: AddViewModel, onBack: () -> Unit, id: String?) {
     LaunchedEffect(key1 = Unit) {
         vm.obtainEvent(AddEvent.EnterScreen(id))
     }
+
     LaunchedEffect(key1 = viewAction) {
         when (viewAction) {
             AddAction.NavigateBack -> onBack()

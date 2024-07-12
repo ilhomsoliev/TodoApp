@@ -7,4 +7,5 @@ sealed class HomeEvent {
     data object AddClick : HomeEvent()
 
     data object ToggleIsCompletedVisible : HomeEvent()
+    data object Refresh : HomeEvent()
 }

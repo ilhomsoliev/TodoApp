@@ -3,6 +3,7 @@ package com.ilhomsoliev.todo.core
 import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.UUID
 
 
 private const val IS_DEBUG: Boolean = true // BuildConfig.DEBUG
@@ -25,3 +26,5 @@ fun formatDate(dateInMillis: Long): String {
     val dateFormat = SimpleDateFormat("d MMMM yyyy", Locale("ru"))
     return dateFormat.format(dateInMillis)
 }
+
+fun getDeviceSerialNumber(): String = UUID.randomUUID().toString()

@@ -1,39 +1,50 @@
 package com.ilhomsoliev.todo.feature.add
 
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
+import com.ilhomsoliev.todo.core.ErrorTypes
 import com.ilhomsoliev.todo.core.ResultState
 import com.ilhomsoliev.todo.core.generateRandomString
-import com.ilhomsoliev.todo.data.models.TodoItemModel
-import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
+import com.ilhomsoliev.todo.core.getDeviceSerialNumber
+import com.ilhomsoliev.todo.core.on
+import com.ilhomsoliev.todo.domain.models.TodoModel
+import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import javax.inject.Inject
 
-class AddViewModel(
-    private val repository: TodoItemsRepository
+
+@HiltViewModel
+class AddViewModel @Inject constructor(
+    private val repository: TodoRepository
 ) : BaseSharedViewModel<AddViewState, AddAction, AddEvent>(AddViewState()) {
 
     override fun obtainEvent(viewEvent: AddEvent) {
         when (viewEvent) {
             is AddEvent.Add -> {
                 withViewModelScope {
-                    val response = repository.insertTodo(
-                        TodoItemModel(
+                    val response = repository.addTodo(
+                        TodoModel(
                             id = viewState.id ?: generateRandomString(),
                             text = viewState.text,
                             priority = viewState.priority,
-                            deadline = viewState.deadline,
-                            isCompleted = false,
-                            createdDate = System.currentTimeMillis(),
-                            editedDate = null,
+                            deadline = viewState.deadline ?: System.currentTimeMillis(), // TODO
+                            done = false,
+                            createdAt = System.currentTimeMillis(),
+                            changedAt = 0,
+                            color = "",
+                            lastUpdatedBy = getDeviceSerialNumber()
                         )
                     )
                     if (response is ResultState.Success) {
                         viewAction = AddAction.NavigateBack
-                    } else {
-                        showSnackbarMessage("Заполните поля")
+                    } else if (response is ResultState.Error) {
+                        showSnackbarMessage("Что то пошло не так!")
+                        if (response.types.contains(ErrorTypes.Network))
+                            viewAction = AddAction.NavigateBack
                     }
                 }
             }
@@ -53,18 +64,22 @@ class AddViewModel(
             is AddEvent.EnterScreen -> {
                 withViewModelScope {
                     viewEvent.id?.let {
-                        repository.getTodoById(it).let { todo ->
-                            if (todo is ResultState.Success) {
-                                viewState = viewState.copy(
-                                    id = todo.data.id,
-                                    text = todo.data.text,
-                                    priority = todo.data.priority,
-                                    deadline = todo.data.deadline,
-                                    date = todo.data.deadline?.let { it1 -> getDateForDeadline(it1) }
-                                        ?: "",
-                                )
+                        if (it != "null")
+                            repository.getTodoById(it).let { todo ->
+                                if (todo is ResultState.Success) {
+                                    viewState = viewState.copy(
+                                        id = todo.data.id,
+                                        text = todo.data.text,
+                                        priority = todo.data.priority,
+                                        deadline = todo.data.deadline,
+                                        date = todo.data.deadline.let { it1 ->
+                                            getDateForDeadline(
+                                                it1
+                                            )
+                                        },
+                                    )
+                                }
                             }
-                        }
                     }
                 }
             }
@@ -72,7 +87,9 @@ class AddViewModel(
             AddEvent.Delete -> {
                 withViewModelScope {
                     viewState.id?.let {
-                        repository.deleteTodo(it)
+                        repository.deleteTodo(it).on {
+                            showSnackbarMessage("Что то пошло не так!")
+                        }
                     }
                     viewAction = AddAction.NavigateBack
                 }

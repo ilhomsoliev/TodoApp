@@ -2,13 +2,17 @@ package com.ilhomsoliev.todo.feature.home
 
 import com.ilhomsoliev.todo.core.BaseSharedViewModel
 import com.ilhomsoliev.todo.core.ResultState
-import com.ilhomsoliev.todo.data.repository.TodoItemsRepository
+import com.ilhomsoliev.todo.core.on
+import com.ilhomsoliev.todo.domain.repository.TodoRepository
 import com.ilhomsoliev.todo.feature.home.models.HomeAction
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel(
-    private val repository: TodoItemsRepository
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val repository: TodoRepository
 ) : BaseSharedViewModel<HomeViewState, HomeAction, HomeEvent>(HomeViewState()) {
 
     override fun obtainEvent(viewEvent: HomeEvent) {
@@ -29,13 +33,26 @@ class HomeViewModel(
                 }
             }
 
+            is HomeEvent.Refresh -> {
+                withViewModelScope {
+                    repository.updateList().on {
+                        viewAction = HomeAction.ShowSnackbar("Could no update list from server")
+                    }
+                }
+            }
+
             else -> {}
         }
     }
 
     init {
         withViewModelScope {
-            repository.getTodos().collect {
+            repository.getTodos().on {
+                viewAction = HomeAction.ShowSnackbar("Could no update list from server")
+            }
+        }
+        withViewModelScope {
+            repository.observeTodos().collect {
                 if (it is ResultState.Success) {
                     viewState = viewState.copy(todos = it.data)
                 } else {
@@ -45,11 +62,7 @@ class HomeViewModel(
         }
         withViewModelScope {
             repository.getDoneTodosAmount().collect {
-                if (it is ResultState.Success) {
-                    viewState = viewState.copy(completedCount = it.data)
-                } else {
-                    viewAction = HomeAction.ShowSnackbar("Some error while loading amount")
-                }
+                viewState = viewState.copy(completedCount = it)
             }
         }
         withViewModelScope {
@@ -61,7 +74,9 @@ class HomeViewModel(
 
     private fun deleteTodoAt(todoId: String) {
         withViewModelScope {
-            repository.deleteTodo(todoId)
+            repository.deleteTodo(todoId).on {
+                showSnackbarMessage("Что то пошло не так!")
+            }
         }
     }
 

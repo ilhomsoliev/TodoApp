@@ -30,7 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ilhomsoliev.todo.R
-import com.ilhomsoliev.todo.data.models.TodoItemModel
+import com.ilhomsoliev.todo.domain.models.TodoModel
 import com.ilhomsoliev.todo.feature.home.models.HomeEvent
 import com.ilhomsoliev.todo.feature.home.models.HomeViewState
 import com.ilhomsoliev.todo.shared.SwipeableItem
@@ -41,7 +41,7 @@ import com.ilhomsoliev.todo.shared.theme.TodoTheme
 @Preview
 private fun HomeDisplayPreview() {
     TodoTheme(false) {
-        HomeDisplay(state = HomeViewState(todos = TodoItemModel.demos)) {}
+        HomeDisplay(state = HomeViewState(todos = TodoModel.demos)) {}
     }
 }
 
@@ -49,7 +49,7 @@ private fun HomeDisplayPreview() {
 @Preview
 private fun HomeDisplayPreviewDark() {
     TodoTheme(true) {
-        HomeDisplay(state = HomeViewState(todos = TodoItemModel.demos)) {}
+        HomeDisplay(state = HomeViewState(todos = TodoModel.demos)) {}
     }
 }
 
@@ -69,10 +69,14 @@ fun HomeDisplay(
             HomeTopBar(
                 elevation = elevation,
                 completedItemsCount = state.completedCount,
-                showCompleted = state.isShowCompletedEnabled
-            ) {
-                callback(HomeEvent.ToggleIsCompletedVisible)
-            }
+                showCompleted = state.isShowCompletedEnabled,
+                onEyeIconClick = {
+                    callback(HomeEvent.ToggleIsCompletedVisible)
+                },
+                onRefreshIconClick = {
+                    callback(HomeEvent.Refresh)
+                }
+            )
         },
         floatingActionButton = {
             FloatingActionButton(containerColor = AppTheme.colorScheme.blue, onClick = {

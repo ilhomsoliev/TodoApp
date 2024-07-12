@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEachIndexed
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.core.formatDate
-import com.ilhomsoliev.todo.data.models.TodoItemModel
 import com.ilhomsoliev.todo.data.models.TodoPriority
+import com.ilhomsoliev.todo.domain.models.TodoModel
 import com.ilhomsoliev.todo.shared.theme.AppTheme
 import com.ilhomsoliev.todo.shared.theme.TodoTheme
 
@@ -44,7 +44,7 @@ private fun TodoItemPreview(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .background(AppTheme.colorScheme.backPrimary)
         ) {
-            TodoItemModel.demos.fastForEachIndexed { index, todoItemModel ->
+            TodoModel.demos.fastForEachIndexed { index, todoItemModel ->
                 TodoItem(
                     item = todoItemModel,
                     isFirst = index == 0,
@@ -64,7 +64,7 @@ private fun TodoItemPreviewDark(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .background(AppTheme.colorScheme.backPrimary)
         ) {
-            TodoItemModel.demos.fastForEachIndexed { index, todoItemModel ->
+            TodoModel.demos.fastForEachIndexed { index, todoItemModel ->
                 TodoItem(
                     item = todoItemModel,
                     isFirst = index == 0,
@@ -77,12 +77,12 @@ private fun TodoItemPreviewDark(modifier: Modifier = Modifier) {
 
 @Composable
 fun TodoItem(
-    item: TodoItemModel,
+    item: TodoModel,
     isFirst: Boolean,
     onCheckedChange: ((Boolean) -> Unit), onClick: () -> Unit
 ) {
     val borderColorAnimated by animateColorAsState(
-        targetValue = if (item.isCompleted) AppTheme.colorScheme.green else AppTheme.colorScheme.labelTertiary,
+        targetValue = if (item.done) AppTheme.colorScheme.green else AppTheme.colorScheme.labelTertiary,
         animationSpec = tween(durationMillis = 200), label = ""
     )
 
@@ -113,7 +113,7 @@ fun TodoItem(
                 else CheckboxDefaults.colors().uncheckedBoxColor,
             ),
             modifier = Modifier,
-            checked = item.isCompleted,
+            checked = item.done,
             onCheckedChange = onCheckedChange
         )
         Row(modifier = Modifier.weight(1f)) {

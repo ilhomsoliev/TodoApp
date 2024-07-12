@@ -1,6 +1,23 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
+//    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
+}
+
+
+fun getLocalProperty(propertyName: String, project: Project): String? {
+    val propertiesFile = project.rootProject.file("local.properties")
+    if (propertiesFile.exists()) {
+        val properties = Properties()
+        properties.load(FileInputStream(propertiesFile))
+        return properties.getProperty(propertyName)
+    }
+    return null
 }
 
 android {
@@ -13,8 +30,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "API_KEY", "\"${getLocalProperty("API_KEY", project)}\"")
+        buildConfigField("String", "YAPASSPORT", "\"${getLocalProperty("YAPASSPORT", project)}\"")
     }
 
     buildTypes {
@@ -39,6 +57,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -53,23 +72,44 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.activity:activity-compose")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.coil.compose)
     implementation("androidx.compose.material3:material3-window-size-class")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0")
-    implementation ("org.jetbrains.kotlin:kotlin-reflect:1.8.21")
-    // Fragment KTX
-    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.constraintlayout.compose)
+    // Reflection
+    implementation(libs.kotlin.reflect)
+    // ktor
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.jackson)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.auth)
+    implementation(libs.ktor.client.core)
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    //Room
+    val room = "2.6.1"
+    implementation("androidx.room:room-runtime:$room")
+    implementation("androidx.room:room-runtime:$room")
+    implementation("androidx.room:room-ktx:$room")
+    kapt("androidx.room:room-compiler:$room")
+    // Worker
+    implementation(libs.androidx.work.runtime)
+    implementation(libs.androidx.work.runtime.ktx)
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // Lifecycle extensions
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation (libs.androidx.cardview)
+    implementation(libs.androidx.cardview)
     debugImplementation(libs.androidx.ui.tooling)
 }
