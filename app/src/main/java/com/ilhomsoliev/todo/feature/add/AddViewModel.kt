@@ -12,6 +12,8 @@ import com.ilhomsoliev.todo.feature.add.model.AddAction
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
 import com.ilhomsoliev.todo.feature.add.model.AddViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.isActive
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import javax.inject.Inject
@@ -22,10 +24,13 @@ class AddViewModel @Inject constructor(
     private val repository: TodoRepository
 ) : BaseSharedViewModel<AddViewState, AddAction, AddEvent>(AddViewState()) {
 
+    private var addJob: Job? = null
     override fun obtainEvent(viewEvent: AddEvent) {
         when (viewEvent) {
             is AddEvent.Add -> {
-                withViewModelScope {
+                addJob?.cancel()
+                addJob = withViewModelScope {
+                    if(!isActive) return@withViewModelScope
                     val response = repository.addTodo(
                         TodoModel(
                             id = viewState.id ?: generateRandomString(),

@@ -60,9 +60,8 @@ abstract class BaseSharedViewModel<State : Any, Action, Event>(initialState: Sta
     protected fun withViewModelScope(
         context: CoroutineContext = Dispatchers.IO,
         block: suspend CoroutineScope.() -> Unit
-    ) {
-        viewModelScope.launch(context = context, block = block)
-    }
+    ) = viewModelScope.launch(context = context, block = block)
+
 
     fun clear() {
         //coroutineTags.forEach { it.value.cancel() }
