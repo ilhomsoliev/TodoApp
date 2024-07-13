@@ -1,70 +1,29 @@
-import java.io.FileInputStream
-import java.util.Properties
+import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import gradle.kotlin.dsl.accessors._b02ce2861748b9a49df2983d1f00f893.androidTestImplementation
+import gradle.kotlin.dsl.accessors._b02ce2861748b9a49df2983d1f00f893.debugImplementation
+import gradle.kotlin.dsl.accessors._b02ce2861748b9a49df2983d1f00f893.implementation
+import gradle.kotlin.dsl.accessors._b02ce2861748b9a49df2983d1f00f893.testImplementation
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
-    id("android-app-convention")
-    id("telegram-reporter")
-//    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
 }
 
-
-fun getLocalProperty(propertyName: String, project: Project): String? {
-    val propertiesFile = project.rootProject.file("local.properties")
-    if (propertiesFile.exists()) {
-        val properties = Properties()
-        properties.load(FileInputStream(propertiesFile))
-        return properties.getProperty(propertyName)
-    }
-    return null
-}
-
-android {
-    namespace = "com.ilhomsoliev.todo"
-    compileSdk = 34
-
-    defaultConfig {
-        applicationId = "com.ilhomsoliev.todo"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "API_KEY", "\"${getLocalProperty("API_KEY", project)}\"")
-        buildConfigField("String", "YAPASSPORT", "\"${getLocalProperty("YAPASSPORT", project)}\"")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    buildFeatures.compose = true
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+configure<BaseAppModuleExtension> {
+    baseAndroidConfig()
     buildFeatures {
+        compose = true
         viewBinding = true
         buildConfig = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
