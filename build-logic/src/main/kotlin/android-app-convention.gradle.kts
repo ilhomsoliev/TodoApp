@@ -1,14 +1,10 @@
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
-import gradle.kotlin.dsl.accessors._b02ce2861748b9a49df2983d1f00f893.androidTestImplementation
-import gradle.kotlin.dsl.accessors._b02ce2861748b9a49df2983d1f00f893.debugImplementation
-import gradle.kotlin.dsl.accessors._b02ce2861748b9a49df2983d1f00f893.implementation
-import gradle.kotlin.dsl.accessors._b02ce2861748b9a49df2983d1f00f893.testImplementation
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     kotlin("kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 configure<BaseAppModuleExtension> {

@@ -1,4 +1,18 @@
 import com.android.build.gradle.BaseExtension
+import org.gradle.api.Project
+import java.io.FileInputStream
+import java.util.Properties
+
+
+fun getLocalProperty(propertyName: String, project: Project): String? {
+    val propertiesFile = project.rootProject.file("local.properties")
+    if (propertiesFile.exists()) {
+        val properties = Properties()
+        properties.load(FileInputStream(propertiesFile))
+        return properties.getProperty(propertyName)
+    }
+    return null
+}
 
 fun BaseExtension.baseAndroidConfig() {
     namespace = AndroidConst.NAMESPACE
@@ -8,6 +22,8 @@ fun BaseExtension.baseAndroidConfig() {
         vectorDrawables {
             useSupportLibrary = true
         }
+//        buildConfigField("String", "API_KEY", "\"${getLocalProperty("API_KEY", project)}\"")
+//        buildConfigField("String", "YAPASSPORT", "\"${getLocalProperty("YAPASSPORT", project)}\"")
     }
     buildTypes {
         getByName("release") {
