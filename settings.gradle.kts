@@ -1,4 +1,6 @@
 pluginManagement {
+    includeBuild("build-logic")
+
     repositories {
         google {
             content {
@@ -17,6 +19,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+ /*   versionCatalogs {
+        create("libs") {
+            from(files("prepare/libs.toml"))
+        }
+    }*/
 }
 
 rootProject.name = "ToDo"
