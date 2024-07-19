@@ -74,9 +74,20 @@ class HomeViewModel @Inject constructor(
 
     private fun deleteTodoAt(todoId: String) {
         withViewModelScope {
-            repository.deleteTodo(todoId).on {
-                showSnackbarMessage("Что то пошло не так!")
-            }
+            repository.getTodoById(todoId).on(success = { todo ->
+                repository.deleteTodo(todoId).on(success = {
+                    showSnackbarMessage(
+                        "Удалить " + todo.text,
+                        actionLabel = "Отмена",
+                        onActionPerformed = {
+                            withViewModelScope {
+                                repository.addTodo(todo)
+                            }
+                        })
+                }) {
+                    showSnackbarMessage("Что то пошло не так!")
+                }
+            })
         }
     }
 
