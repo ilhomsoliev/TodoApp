@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -21,17 +19,12 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastForEach
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.data.models.TodoPriority
 import com.ilhomsoliev.todo.feature.add.model.AddEvent
@@ -66,7 +59,6 @@ fun AddDisplay(
     state: AddViewState,
     callback: (AddEvent) -> Unit,
 ) {
-    var expanded by remember { mutableStateOf(false) }
 
     val dateState = rememberDatePickerState(selectableDates = object : SelectableDates {
         override fun isSelectableDate(utcTimeMillis: Long): Boolean {
@@ -113,7 +105,7 @@ fun AddDisplay(
                     .fillMaxWidth()
                     .padding(12.dp)
                     .clickable {
-                        expanded = !expanded
+                        callback(AddEvent.PriorityChange(TodoPriority.LOW))
                     }) {
                     Text(
                         text = stringResource(R.string.priority),
@@ -126,22 +118,6 @@ fun AddDisplay(
                         fontSize = 16.sp,
                     )
                     SpacerV(value = 12.dp)
-
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        TodoPriority.entries.fastForEach {
-                            DropdownMenuItem(
-                                text = { Text(it.nameRu) },
-                                onClick = {
-                                    callback(AddEvent.PriorityChange(it))
-                                    expanded = false
-                                }
-                            )
-                        }
-                    }
-
                     HorizontalDivider()
                 }
             }
