@@ -33,8 +33,8 @@ import com.ilhomsoliev.todo.shared.base.SpacerH
 import com.ilhomsoliev.todo.shared.base.SpacerV
 import com.ilhomsoliev.todo.shared.date_picker.DatePickerDialog
 import com.ilhomsoliev.todo.shared.textfield.FeedbackTextField
-import com.ilhomsoliev.todo.shared.theme.AppTheme
-import com.ilhomsoliev.todo.shared.theme.TodoTheme
+import com.ilhomsoliev.theme.AppTheme
+import com.ilhomsoliev.theme.TodoTheme
 import java.util.Calendar
 
 @Composable

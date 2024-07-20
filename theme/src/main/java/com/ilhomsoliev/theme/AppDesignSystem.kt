@@ -1,4 +1,4 @@
-package com.ilhomsoliev.todo.shared.theme
+package com.ilhomsoliev.theme
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf

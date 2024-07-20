@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.ilhomsoliev.todo.shared.theme.TodoTheme
+import com.ilhomsoliev.theme.TodoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

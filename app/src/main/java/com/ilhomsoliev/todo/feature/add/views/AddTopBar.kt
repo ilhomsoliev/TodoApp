@@ -17,8 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ilhomsoliev.todo.R
-import com.ilhomsoliev.todo.shared.theme.AppTheme
-import com.ilhomsoliev.todo.shared.theme.TodoTheme
+import com.ilhomsoliev.theme.AppTheme
+import com.ilhomsoliev.theme.TodoTheme
 
 @Composable
 @Preview
