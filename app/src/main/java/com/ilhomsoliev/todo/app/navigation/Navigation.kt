@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ilhomsoliev.todo.feature.add.AddScreen
+import com.ilhomsoliev.todo.feature.divkit_screen.InfoScreen
 import com.ilhomsoliev.todo.feature.home.HomeScreen
 
 
@@ -33,6 +34,14 @@ fun Navigation(
             composable(Screens.Home.route) {
                 HomeScreen(vm = hiltViewModel(), goAddTodo = {
                     navController.navigate(Screens.Add.buildRoute(it))
+                }, goInfo = {
+                    navController.navigate(Screens.Info.route)
+                })
+            }
+
+            composable(Screens.Info.route) {
+                InfoScreen(onBack = {
+                    navController.navigateUp()
                 })
             }
             composable(Screens.Add.route) {

@@ -19,4 +19,23 @@
     <color name="backSecondary">#FFFFFF</color>
     <color name="backElevated">#FFFFFF</color>
 
+
+    <color name="cancel_button_color">@color/label_primary</color>
+    <color name="support_separator">#33000000</color>
+    <color name="support_overlay">#0F000000</color>
+    <color name="label_primary">#FF000000</color>
+    <color name="label_secondary">#99000000</color>
+    <color name="label_tertiary">#4D000000</color>
+    <color name="label_disable">#26000000</color>
+    <color name="color_red">#FFFF3B30</color>
+    <color name="color_green">#FF34C759</color>
+    <color name="color_blue">#FF007AFF</color>
+    <color name="color_light_blue">#4D007AFF</color>
+    <color name="color_gray">#FF8E8E93</color>
+    <color name="color_gray_light">#FFD1D1D6</color>
+    <color name="color_white">#FFFFFFFF</color>
+    <color name="back_primary">#FFF7F6F2</color>
+    <color name="back_secondary">#FFFFFFFF</color>
+    <color name="back_elevated">#FFFFFFFF</color>
+
 </resources>

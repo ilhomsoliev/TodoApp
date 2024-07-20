@@ -75,6 +75,9 @@ fun HomeDisplay(
                 },
                 onRefreshIconClick = {
                     callback(HomeEvent.Refresh)
+                },
+                onInfoClick = {
+                    callback(HomeEvent.OpenInfo)
                 }
             )
         },
