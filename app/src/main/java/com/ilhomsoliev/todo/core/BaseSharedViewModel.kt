@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseSharedViewModel<State : Any, Action, Event>(initialState: State) :
     ViewModel() {
@@ -80,7 +79,7 @@ abstract class BaseSharedViewModel<State : Any, Action, Event>(initialState: Sta
         _snackbarMessage.value = SnackbarMessage.from(
             userMessage = UserMessage.from(message),
             actionLabelMessage = if (actionLabel != null) UserMessage.from(actionLabel) else null,
-            withDismissAction = true,
+            withDismissAction = actionLabel == null,
             onSnackbarResult = {
                 if (it == SnackbarResult.ActionPerformed)
                     onActionPerformed()
@@ -93,7 +92,8 @@ abstract class BaseSharedViewModel<State : Any, Action, Event>(initialState: Sta
     fun showSnackbarMessage(message: String) {
         _snackbarMessage.value = SnackbarMessage.from(
             userMessage = UserMessage.from(message),
-        )
+
+            )
     }
 
 }

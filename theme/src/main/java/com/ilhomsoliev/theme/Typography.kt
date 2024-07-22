@@ -1,4 +1,4 @@
-package com.ilhomsoliev.todo.shared.theme
+package com.ilhomsoliev.theme
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column

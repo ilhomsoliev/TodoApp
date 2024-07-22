@@ -5,6 +5,10 @@ plugins {
     id("telegram-reporter")
 }
 
+tgReporter {
+    token.set(providers.environmentVariable("TG_TOKEN"))
+    chatId.set(providers.environmentVariable("TG_CHAT"))
+}
 
 android {
     defaultConfig {

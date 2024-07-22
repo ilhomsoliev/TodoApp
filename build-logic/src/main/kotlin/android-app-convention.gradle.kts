@@ -30,6 +30,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(project(":theme"))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -69,4 +70,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.cardview)
     debugImplementation(libs.androidx.ui.tooling)
+
+    val divKitVersion = "30.9.0"
+    implementation("com.yandex.div:div:$divKitVersion")
+    implementation("com.yandex.div:div-core:$divKitVersion")
+    implementation("com.yandex.div:div-json:$divKitVersion")
+    implementation("com.yandex.div:picasso:$divKitVersion")
+    implementation("com.yandex.div:glide:$divKitVersion")
+
 }

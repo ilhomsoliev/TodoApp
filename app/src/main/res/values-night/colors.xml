@@ -18,4 +18,22 @@
     <color name="backPrimary">#181818</color>
     <color name="backSecondary">#303030</color>
     <color name="backElevated">#484848</color>
+
+    <color name="cancel_button_color">@color/label_primary</color>
+    <color name="support_separator">#33FFFFFF</color>
+    <color name="support_overlay">#52000000</color>
+    <color name="label_primary">#FFFFFFFF</color>
+    <color name="label_secondary">#99FFFFFF</color>
+    <color name="label_tertiary">#66FFFFFF</color>
+    <color name="label_disable">#26FFFFFF</color>
+    <color name="color_red">#FFFF453A</color>
+    <color name="color_green">#FF32D74B</color>
+    <color name="color_blue">#FF0A84FF</color>
+    <color name="color_light_blue">#4D0A84FF</color>
+    <color name="color_gray">#FF8E8E93</color>
+    <color name="color_gray_light">#FF48484A</color>
+    <color name="color_white">#FFFFFFFF</color>
+    <color name="back_primary">#FF161618</color>
+    <color name="back_secondary">#FF252528</color>
+    <color name="back_elevated">#FF3C3C3F</color>
 </resources>

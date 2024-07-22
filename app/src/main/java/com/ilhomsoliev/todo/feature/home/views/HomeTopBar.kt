@@ -2,6 +2,7 @@ package com.ilhomsoliev.todo.feature.home.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -22,14 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ilhomsoliev.todo.R
 import com.ilhomsoliev.todo.data.source.local.local_based.DataStoreManager
-import com.ilhomsoliev.todo.shared.theme.AppTheme
-import com.ilhomsoliev.todo.shared.theme.TodoTheme
+import com.ilhomsoliev.theme.AppTheme
+import com.ilhomsoliev.theme.TodoTheme
 
 @Composable
 @Preview
 private fun HomeTopBarPreview() {
     TodoTheme(false) {
-        HomeTopBar(12, false, 0.dp, {})
+        HomeTopBar(12, false, 0.dp, {}, {})
     }
 }
 
@@ -37,7 +38,7 @@ private fun HomeTopBarPreview() {
 @Preview
 private fun HomeTopBarPreviewDark() {
     TodoTheme(true) {
-        HomeTopBar(12, false, 4.dp, {})
+        HomeTopBar(12, false, 4.dp, {}, {})
     }
 }
 
@@ -48,6 +49,7 @@ fun HomeTopBar(
     showCompleted: Boolean,
     elevation: Dp,
     onEyeIconClick: () -> Unit,
+    onInfoClick: () -> Unit,
     onRefreshIconClick: () -> Unit = {}
 ) {
     Surface(
@@ -77,6 +79,15 @@ fun HomeTopBar(
                 }
 
             }, actions = {
+                IconButton(
+                    onClick = onInfoClick
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Info,
+                        tint = AppTheme.colorScheme.blue,
+                        contentDescription = null
+                    )
+                }
                 if (DataStoreManager.hasError.value)
                     IconButton(
                         onClick = onRefreshIconClick

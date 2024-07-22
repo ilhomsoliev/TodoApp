@@ -10,7 +10,8 @@ import com.ilhomsoliev.todo.shared.snackbar.SnackbarMessageHandler
 @Composable
 fun HomeScreen(
     vm: HomeViewModel,
-    goAddTodo: (id: String?) -> Unit
+    goAddTodo: (id: String?) -> Unit,
+    goInfo: () -> Unit,
 ) {
     val viewState by vm.viewStates().collectAsState()
     val viewAction by vm.viewActions().collectAsState(initial = null)
@@ -29,6 +30,10 @@ fun HomeScreen(
 
             HomeEvent.AddClick -> {
                 goAddTodo(null)
+            }
+
+            HomeEvent.OpenInfo -> {
+                goInfo()
             }
 
             else -> vm.obtainEvent(it)

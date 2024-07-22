@@ -13,6 +13,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.ilhomsoliev.todo.shared.snackbar.model.SnackbarMessage
 import com.ilhomsoliev.todo.shared.snackbar.model.asString
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -109,6 +110,7 @@ fun SnackbarMessageHandler(
             val actionLabel = snackbarMessage.actionLabelMessage?.asString()
 
             LaunchedEffect(snackbarMessage, onDismissSnackbar) {
+
                 snackbarController.showMessage(
                     message = message,
                     actionLabel = actionLabel,
@@ -117,6 +119,10 @@ fun SnackbarMessageHandler(
                     onSnackbarResult = snackbarMessage.onSnackbarResult
                 )
                 onDismissSnackbar()
+                launch {
+                    delay(2000L)
+                    onDismissSnackbar()
+                }
             }
         }
 
@@ -128,6 +134,10 @@ fun SnackbarMessageHandler(
                 )
 
                 onDismissSnackbar()
+                launch {
+                    delay(2000L)
+                    onDismissSnackbar()
+                }
             }
         }
     }

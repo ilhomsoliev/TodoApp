@@ -1,0 +1,233 @@
+{
+  "card": {
+    "log_id": "about_screen",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "log_id": "about_screen_main",
+          "background": [
+            {
+              "type": "solid",
+              "color": "@color/background_color"
+            }
+          ],
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "text",
+              "log_id": "about_title",
+              "text": "О приложении",
+              "font_size": 24,
+              "alignment_horizontal": "center",
+              "margins": {
+                "top": 32,
+                "bottom": 16
+              },
+              "text_alignment_horizontal": "center",
+              "text_color": "@color/text_color"
+            },
+            {
+              "type": "image",
+              "log_id": "about_image",
+              "image_url": "file:///android_asset/image.jpg",
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "fixed",
+                "value": 200
+              },
+              "alignment_horizontal": "center"
+            },
+            {
+              "type": "text",
+              "log_id": "about_description",
+              "text": "Это приложение позволяет вам записать дела, которые вы хотите не забыть сделать в будущем!",
+              "font_size": 16,
+              "alignment_horizontal": "center",
+              "margins": {
+                "top": 16,
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "text_alignment_horizontal": "center",
+              "text_color": "@color/text_color"
+            },
+            {
+              "type": "container",
+              "log_id": "show_details_container",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#007AFF"
+                }
+              ],
+              "corner_radius": 8,
+              "paddings": {
+                "top": 12,
+                "bottom": 12,
+                "left": 24,
+                "right": 24
+              },
+              "margins": {
+                "top": 32,
+                "bottom": 16
+              },
+              "alignment_horizontal": "center",
+              "actions": [
+                {
+                  "log_id": "show_details_action",
+                  "url": "div-action://set_state?state_id=2"
+                }
+              ],
+              "items": [
+                {
+                  "type": "text",
+                  "log_id": "show_details",
+                  "text": "Показать подробности",
+                  "font_size": 14,
+                  "alignment_horizontal": "center",
+                  "text_alignment_horizontal": "center",
+                  "text_color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "log_id": "go_back_container",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF3B30"
+                }
+              ],
+              "corner_radius": 8,
+              "paddings": {
+                "top": 12,
+                "bottom": 12,
+                "left": 24,
+                "right": 24
+              },
+              "margins": {
+                "top": 16,
+                "bottom": 16
+              },
+              "alignment_horizontal": "center",
+              "actions": [
+                {
+                  "log_id": "go_back_action",
+                  "url": "sample-action://go_back"
+                }
+              ],
+              "items": [
+                {
+                  "type": "text",
+                  "log_id": "go_back",
+                  "text": "Закрыть",
+                  "font_size": 14,
+                  "alignment_horizontal": "center",
+                  "text_alignment_horizontal": "center",
+                  "text_color": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "state_id": 2,
+        "div": {
+          "type": "container",
+          "log_id": "about_screen_details",
+          "height": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "@color/background_color"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "log_id": "details_title",
+              "text": "Подробная информация",
+              "font_size": 24,
+              "alignment_horizontal": "center",
+              "margins": {
+                "top": 32,
+                "bottom": 16
+              },
+              "text_alignment_horizontal": "center",
+              "text_color": "@color/text_color"
+            },
+            {
+              "type": "text",
+              "log_id": "details_description",
+              "text": "- На главном экране нажмите на заметку, чтобы измениить её.\n\n- Нажмите на чекбокс, чтобы изменить статус заметки.\n\n- В настройках вы можете изменить тему приложения.",
+              "font_size": 16,
+              "alignment_horizontal": "center",
+              "margins": {
+                "top": 16,
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "text_alignment_horizontal": "left",
+              "text_color": "@color/text_color"
+            },
+            {
+              "type": "container",
+              "log_id": "go_back_from_details_container",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF3B30"
+                }
+              ],
+              "corner_radius": 8,
+              "paddings": {
+                "top": 12,
+                "bottom": 12,
+                "left": 24,
+                "right": 24
+              },
+              "margins": {
+                "top": 32,
+                "bottom": 16
+              },
+              "alignment_horizontal": "center",
+              "actions": [
+                {
+                  "log_id": "go_back_from_details_action",
+                  "url": "div-action://set_state?state_id=1"
+                }
+              ],
+              "items": [
+                {
+                  "type": "text",
+                  "log_id": "go_back_from_details",
+                  "text": "Назад",
+                  "font_size": 14,
+                  "alignment_horizontal": "center",
+                  "text_alignment_horizontal": "center",
+                  "text_color": "#FFFFFF"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
